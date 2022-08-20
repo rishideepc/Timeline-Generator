@@ -1,4 +1,3 @@
-from ast import keyword
 import requests
 import json
 from bs4 import BeautifulSoup
