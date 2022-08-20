@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <link rel="stylesheet" href="./timeline.css">
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.onload = function() {
+            document.getElementById('date-year').innerHTML="20th May 2019";
+        }
+    </script>
+    <py-env>
+        - beautifulsoup4
+        - requests
+        - flask
+        - paths:
+          - ./test_2.py
+          <!-- - C:\Users\HP\Desktop\Python_AI\Timeline_Generator\information -->
+      </py-env>
+    <title>Timeline</title>
+</head>
+<body>
+    <div class="container">
+        <div class="timeline">
+            <ul>
+                <li>
+                    <div class="timeline-content">
+                        <h2 class="date" id="date-year">
+                            <!-- <py-script>
+                                
+
+                            </py-script> -->
+                        </h2>
+                        <h1>Heading1</h1>
+                        <p>
+                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Magnam maxime nulla sapiente veritatis blanditiis eos ad tenetur nesciunt facere similique? Dolorem necessitatibus dicta reprehenderit incidunt dignissimos veniam temporibus, explicabo sapiente.
+                            <py-script>
+                                
+                            </py-script>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <div class="timeline-content">
+                        <h2 class="date">20th May 2019</h2>
+                        <h1>Heading2</h1>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum dolor unde mollitia harum cum voluptatibus quas vitae, fugit, ab odio itaque eaque illo qui blanditiis reprehenderit rerum velit dolorum quisquam?</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="timeline-content">
+                        <h2 class="date">20th May 2019</h2>
+                        <h1>Heading3</h1>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum dolor unde mollitia harum cum voluptatibus quas vitae, fugit, ab odio itaque eaque illo qui blanditiis reprehenderit rerum velit dolorum quisquam?</p>
+                    </div>
+                </li>
+                <li>
+                    <div class="timeline-content">
+                        <h2 class="date">20th May 2019</h2>
+                        <h1>Heading4</h1>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum dolor unde mollitia harum cum voluptatibus quas vitae, fugit, ab odio itaque eaque illo qui blanditiis reprehenderit rerum velit dolorum quisquam?</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+</body>
+</html>
