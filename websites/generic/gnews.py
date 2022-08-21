@@ -10,7 +10,7 @@ bs = BeautifulSoup(data, 'lxml')
 items = bs.find_all('item')
 for index, item in enumerate(items):
     title = item.title.string
-    datetime = item.find('pubDate')
+    datetime = item.pubdate.string
     type_= keywords[0]
     print(f'''
         {index+1}.  Title: {title}
