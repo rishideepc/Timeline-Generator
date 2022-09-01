@@ -1,7 +1,14 @@
 from bs4 import BeautifulSoup
 import requests
 
-def find_event_cric():
+
+# keywords for sports class
+keywords_sports=['cricket', 'football', 'basketball', 'swimming', 'hockey']
+
+#######################################################################################
+#cron job script
+
+def fetch_info_cricaddic():
     html_text=requests.get('https://www.cricketaddictor.com')
     soup=BeautifulSoup(html_text.content, 'lxml')
 
@@ -17,4 +24,6 @@ def find_event_cric():
                 f.write(f'Info: {text_y}\n')
 
                 f.write(f'\n\nFile Saved: New Cricket Info')
-    
+
+
+######################################################################################

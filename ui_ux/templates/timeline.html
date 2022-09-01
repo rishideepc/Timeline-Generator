@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
-    <link rel="stylesheet" href="./timeline.css">
+    <link rel="stylesheet" href="./../static/timeline.css">
     <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -29,40 +29,62 @@
             <ul>
                 <li>
                     <div class="timeline-content">
-                        <h2 class="date" id="date-year">
-                            <!-- <py-script>
-                                
-
-                            </py-script> -->
-                        </h2>
-                        <h1>Heading1</h1>
+                        {%if date_1%}
+                        <h2 class="date">{{date_1}}</h2>
+                        {% endif %}
+                        {%if title_1%}
+                        <h1>{{title_1}}</h1>
+                        {% endif %}
+                        {% if desc_1 %}
                         <p>
-                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Magnam maxime nulla sapiente veritatis blanditiis eos ad tenetur nesciunt facere similique? Dolorem necessitatibus dicta reprehenderit incidunt dignissimos veniam temporibus, explicabo sapiente.
-                            <py-script>
-                                
-                            </py-script>
+                            {{desc_1}}
                         </p>
+                        {% endif %}
                     </div>
                 </li>
                 <li>
                     <div class="timeline-content">
-                        <h2 class="date">20th May 2019</h2>
-                        <h1>Heading2</h1>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum dolor unde mollitia harum cum voluptatibus quas vitae, fugit, ab odio itaque eaque illo qui blanditiis reprehenderit rerum velit dolorum quisquam?</p>
+                        {%if date_2%}
+                        <h2 class="date">{{date_2}}</h2>
+                        {% endif %}
+                        {%if title_2%}
+                        <h1>{{title_2}}</h1>
+                        {% endif %}
+                        {% if desc_2 %}
+                        <p>
+                            {{desc_2}}
+                        </p>
+                        {% endif %}
                     </div>
                 </li>
                 <li>
                     <div class="timeline-content">
-                        <h2 class="date">20th May 2019</h2>
-                        <h1>Heading3</h1>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum dolor unde mollitia harum cum voluptatibus quas vitae, fugit, ab odio itaque eaque illo qui blanditiis reprehenderit rerum velit dolorum quisquam?</p>
+                        {%if date_3%}
+                        <h2 class="date">{{date_3}}</h2>
+                        {% endif %}
+                        {%if title_3%}
+                        <h1>{{title_3}}</h1>
+                        {% endif %}
+                        {% if desc_3 %}
+                        <p>
+                            {{desc_3}}
+                        </p>
+                        {% endif %}
                     </div>
                 </li>
                 <li>
                     <div class="timeline-content">
-                        <h2 class="date">20th May 2019</h2>
-                        <h1>Heading4</h1>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum dolor unde mollitia harum cum voluptatibus quas vitae, fugit, ab odio itaque eaque illo qui blanditiis reprehenderit rerum velit dolorum quisquam?</p>
+                        {%if date_4 %}
+                        <h2 class="date">{{date_4}}</h2>
+                        {% endif %}
+                        {%if title_4%}
+                        <h1>{{title_4}}</h1>
+                        {% endif %}
+                        {% if desc_4 %}
+                        <p>
+                            {{desc_4}}
+                        </p>
+                        {% endif %}
                     </div>
                 </li>
             </ul>

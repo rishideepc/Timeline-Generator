@@ -1,7 +1,7 @@
 import time
 from ui_ux.views import my_form_post
 from websites.generic.ndtv import *
-from websites.sports.cricketaddic import find_event_cric
+from websites.sports.cricketaddic import *
 from ui_ux import create_app
 # from ui_ux.views import *
 from flask import request

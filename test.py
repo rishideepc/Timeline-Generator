@@ -40,16 +40,22 @@
 # # with open("test.txt", 'w') as f:
 # #     f.write(heading)
 # print(heading)
+##################################################
+# import requests
+# import json
+# from bs4 import BeautifulSoup
 
-import requests
+# res = requests.get('https://news.google.com/rss/search?q=green+technology&hl=en-IN&gl=IN&ceid=IN:en')
+# data = res.content
+# bs = BeautifulSoup(data)
+# items = bs.find_all('item')
+# for item in items:
+#     title = (item.description.string)
+#     print(title)
+#     print("\n")
+###################################################
 import json
-from bs4 import BeautifulSoup
-
-res = requests.get('https://news.google.com/rss/search?q=green+technology&hl=en-IN&gl=IN&ceid=IN:en')
-data = res.content
-bs = BeautifulSoup(data)
-items = bs.find_all('item')
-for item in items:
-    title = (item.description.string)
-    print(title)
-    print("\n")
+with open('data_landslide.json', 'r') as f:
+        dicts_=json.loads(f)
+for dict_ in dicts_:
+    print(dict_['News Feature-landslide'])

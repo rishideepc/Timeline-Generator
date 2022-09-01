@@ -13,10 +13,6 @@ from flask import request
 def create_app():
     app=Flask(__name__)
     app.config['SECRET_KEY']= "Python Web-Scrapper"
-    
-    
-    # word=my_form_post.processed_text
-    # print(word)
 
     from .views import views
     app.register_blueprint(views, url_prefix='/')
