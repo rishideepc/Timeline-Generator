@@ -27,22 +27,24 @@
     <div class="container">
         <div class="timeline">
             <ul>
+                {%for i in range(0, 100): %}
                 <li>
                     <div class="timeline-content">
-                        {%if date_1%}
-                        <h2 class="date">{{date_1}}</h2>
+                        {%if date_[i]%}
+                        <h2 class="date">{{date_[i]}}</h2>
                         {% endif %}
-                        {%if title_1%}
-                        <h1>{{title_1}}</h1>
+                        {%if title_[i]%}
+                        <h1>{{title_[i]}}</h1>
                         {% endif %}
-                        {% if desc_1 %}
+                        {% if desc_[i] %}
                         <p>
-                            {{desc_1}}
+                            {{desc_[i]}}
                         </p>
                         {% endif %}
                     </div>
                 </li>
-                <li>
+                {% endfor %}
+                <!-- <li>
                     <div class="timeline-content">
                         {%if date_2%}
                         <h2 class="date">{{date_2}}</h2>
@@ -86,7 +88,7 @@
                         </p>
                         {% endif %}
                     </div>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>
