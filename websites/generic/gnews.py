@@ -20,7 +20,7 @@ db=firebase.database()
 
 # keywords for disaster class
 # keywords_disaster=['landslide', 'flood', 'earthquake', 'tsunami', 'flash flood']
-keywords_disaster=['landslide']
+keywords_disaster=['landslide', 'flood', 'earthquake', 'tsunami', 'flash flood']
 
 #####################################################
 # cronjob script
@@ -58,7 +58,7 @@ def fetch_info_gnews(keywords):
 
 
 if __name__=="__main__":
-    
+
     fetch_info_gnews(keywords_disaster)
     # time.sleep(10)
     # url="https://console.firebase.google.com/project/flaskdb-576e5/database/flaskdb-576e5-default-rtdb/data/~2F"
