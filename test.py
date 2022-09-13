@@ -54,8 +54,41 @@
 #     print(title)
 #     print("\n")
 ###################################################
-import json
-with open('data_landslide.json', 'r') as f:
-        dicts_=json.loads(f)
-for dict_ in dicts_:
-    print(dict_['News Feature-landslide'])
+# import json
+# with open('data_landslide.json', 'r') as f:
+#         dicts_=json.loads(f)
+# for dict_ in dicts_:
+#     print(dict_['News Feature-landslide'])
+
+
+# import spacy
+# from spacy import displacy
+# nlp = spacy.load('en_core_web_sm')
+
+# doc = nlp("Thodupuzha: All five members of a family, who were trapped under debris following a landslide in Kudayathoor near Thodupuzha, were found dead after a five-hour-long search."
+#           "The deceased are Maliyekal Soman, his mother Thankamma, wife Shiji, daughter Shima and her son Devanand (4).  Their house was washed away after the landslide hit the area in the early hours of Monday."
+#           "As per reports, the road and crops in the area have been washed away in the landslide.")
+
+# for entity in doc.ents:
+#     if entity.label_ == "GPE":
+#         print(entity.text)
+
+
+# arr=[1, 1, 3]
+# print(enumerate(arr))
+
+# """
+# Thankamma
+
+
+
+arr=[1, 12, 4, 1, 5, 6, 4]
+
+for i in range(0, 6):
+    for j in range(i+1, 6):
+        if (arr[i]==arr[j]):
+            arr[i]=="*"
+
+        
+
+
