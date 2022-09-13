@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import webbrowser
+import datetime
 
 
 # keywords for disaster class
@@ -9,7 +10,7 @@ keywords_disaster=['landslide', 'flood', 'earthquake', 'tsunami', 'flash flood']
 # keywords for generic superclass
 keywords_generic=['politics', 'sports', 'economics', 'disaster']
 
-##########################################################################################
+################################################################################d##########
 # cronjob script
 
 def fetch_info_ndtv(keywords):
