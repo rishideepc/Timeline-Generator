@@ -14,22 +14,25 @@
 # #     print(text, date, stanford_ner(text))
 
 
-# from nltk.tag import StanfordNERTagger
-# from nltk.tokenize import word_tokenize
+from nltk.tag import StanfordNERTagger
+from nltk.tokenize import word_tokenize
 
-# st = StanfordNERTagger('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\ui_ux\\templates\\stanford-ner-2020-11-17\\classifiers\\english.all.3class.distsim.crf.ser.gz',
-# 					   'C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\ui_ux\\templates\\stanford-ner-2020-11-17\\stanford-ner.jar',
-# 					   encoding='utf-8')
+st = StanfordNERTagger('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\ui_ux\\templates\\stanford-ner-2020-11-17\\classifiers\\english.all.3class.distsim.crf.ser.gz',
+					   'C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\ui_ux\\templates\\stanford-ner-2020-11-17\\stanford-ner.jar',
+					   encoding='utf-8')
 
-# text = 'While in France, Christine Lagarde discussed short-term stimulus efforts in a recent interview with the Wall Street Journal.'
+text = 'While in France, Christine Lagarde discussed short-term stimulus efforts in a recent interview with the Wall Street Journal.'
 
-# tokenized_text = word_tokenize(text)
-# classified_text = st.tag(tokenized_text)
+tokenized_text = word_tokenize(text)
+classified_text = st.tag(tokenized_text)
+
+# print(classified_text)
+
+for word, tag in classified_text:
+	if tag=="LOCATION":
+		print(word)
 
 
-# for word, tag in classified_text:
-# 	if tag=="LOCATION":
-# 		print(word)
 
 
 
@@ -48,8 +51,8 @@
 # ['Thodupuzha', 'Kudayathoor', 'Thodupuzha', 'Maliyekal Soman', 'Shiji', 'Shima', 'Devanand']
 # """
 
-from datetime import *
+# from datetime import *
 
-today= date.today()
-cron_job_date_=f'{today.strftime("%b-%d-%Y")}'
-print(cron_job_date_)
+# today= date.today()
+# cron_job_date_=f'{today.strftime("%b-%d-%Y")}'
+# print(cron_job_date_)

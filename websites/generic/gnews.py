@@ -9,6 +9,7 @@ import time
 from datetime import *
 from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
+import sqlite3
 
 st = StanfordNERTagger('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\ui_ux\\templates\\stanford-ner-2020-11-17\\classifiers\\english.all.3class.distsim.crf.ser.gz',
 					   'C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\ui_ux\\templates\\stanford-ner-2020-11-17\\stanford-ner.jar',
@@ -39,7 +40,9 @@ today= date.today()
 cron_job_date_=f'{today.strftime("%b-%d-%Y")}'
 def fetch_info_gnews(keywords):          
     len_=len(keywords)
-    
+    connect_=sqlite3.connect('timeline-data.db')
+    cursor_=connect_.cursor()
+
     for i in range(0, len_):
         # def find_event_gnews(keyword):
         res = requests.get('https://news.google.com/rss/search?q='f'{keywords[i]}''&hl=en-IN&gl=IN&ceid=IN:en')
@@ -74,23 +77,27 @@ def fetch_info_gnews(keywords):
             ###################################################################################
 
 ################################################################################################
+        
 
         for index, item in enumerate(items):
             title = item.title.string
-            date_time=item.pubdate.string
+            date_time=item.pubdate.string.split(' ')
+            date_=date_time[1]+" "+date_time[2]+" "+date_time[3]
             type_= keywords[i]
-            location="*"
+            location="None"
             tokenized_text = word_tokenize(title)   
             classified_text = st.tag(tokenized_text)
             for word, tag in classified_text:
                 if tag=="LOCATION":
                     # db.child(f'{today.strftime("%b-%d-%Y")}').child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(f'News Item-{index+1}').update({"Location":word})
                     location=word
-
-            db.child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(location).child(f'News-Item-{index+1}').update({"Title":title})
-            db.child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(location).child(f'News-Item-{index+1}').update({"Date-Time":date_time})
-            db.child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(location).child(f'News-Item-{index+1}').update({"Type":type_})
-            db.child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(location).child(f'News-Item-{index+1}').update({"CronJob-Date":cron_job_date_})
+            set_=(title, date_, type_, location, cron_job_date_)
+            cursor_.execute("INSERT INTO Disaster values(?, ?, ?, ?, ?)", set_)
+    
+            # db.child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(location).child(f'News-Item-{index+1}').update({"Title":title})
+            # db.child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(location).child(f'News-Item-{index+1}').update({"Date-Time":date_time})
+            # db.child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(location).child(f'News-Item-{index+1}').update({"Type":type_})
+            # db.child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(location).child(f'News-Item-{index+1}').update({"CronJob-Date":cron_job_date_})
 
 
 
@@ -106,13 +113,14 @@ def fetch_info_gnews(keywords):
             # x_=x.val()
             print(f'''
                 {index+1}.  Title: {title}
-                    Event Date-time: {date_time}
+                    Event Date-time: {date_}
                     Event Type: {type_}
                     Location: {location}
                             \n
                 ''')
 
 
+        
         print("\n\n\n")
 
 ###############################################################################################
@@ -141,7 +149,23 @@ def fetch_info_gnews(keywords):
         #         return final_list
 
 #########################################################################
+#     cursor_.execute('''
 
+# SELECT * FROM Disaster
+
+# ''')
+#     items=cursor_.fetchall()
+#     len_=len(items)
+#     for i in range(0, len_):
+#         if i!=len_-1:
+#             for j in range(i+1, len_):
+#                 if(items[j][1]==items[i][1]):
+#                     items[i][1]="null"
+
+#         else:
+#             break
+    connect_.commit()
+    connect_.close()
 
 if __name__=="__main__":
 

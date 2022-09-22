@@ -4,14 +4,20 @@ from flask import Flask, request, render_template, redirect
 from websites.generic.gnews import *
 from websites.generic.ndtv import *
 from websites.sports.cricketaddic import fetch_info_cricaddic
-import pyrebase
+# import pyrebase
 import urllib, json
-url ="https://console.firebase.google.com/project/flaskdb-576e5/database/flaskdb-576e5-default-rtdb/data/~2F"
-
-
+import sqlite3
 import webbrowser
 
+
+# url ="https://console.firebase.google.com/project/flaskdb-576e5/database/flaskdb-576e5-default-rtdb/data/~2F"
+
+
 views= Blueprint('views', __name__)
+
+
+
+
 
 # @app.route('/')
 # @app.route('/', methods=['POST'])
@@ -22,8 +28,12 @@ def my_form():
 
 @views.route('/', methods=['POST'])
 def my_form_post():
-    text = request.form['keyword']
-    text_= request.form['timeframe']
+    connect_=sqlite3.connect('timeline-data.db')
+    cursor_=connect_.cursor()
+    text_keyword = request.form['keyword']
+    text_date_time= request.form['timeframe']
+    text_location= request.form['location']
+
     date_time_=[]
     title=[]
     desc=[]
@@ -35,11 +45,27 @@ def my_form_post():
     # for dict_ in dicts_:
     #     print(dict_['News Feature-landslide'])
 
-    for i in range(0, 100):
-        news_features=db.child(f'{today.strftime("%b-%d-%Y")}').child('Disaster-Data').child(f'News Feature-{text}').child(f'News Item-{i+1}').get()
-        date_time_.append(news_features[0].val())
-        title.append(news_features[2].val())
-        desc.append(news_features[1].val())
+    cursor_.execute(f'''
+        SELECT * FROM Disaster WHERE Type LIKE '{text_keyword}' AND Location LIKE '{text_location}'
+    ''')
+
+    items=cursor_.fetchall()
+    no_items=len(items)
+    for item in items:
+        title.append(item[2])
+        date_time_.append(item[1])
+        desc.append(item[0])
+
+    connect_.commit()
+    connect_.close()
+
+    #####################################################
+    # for i in range(0, 100):
+    #     news_features=db.child(f'{today.strftime("%b-%d-%Y")}').child('Disaster-Data').child(f'News Feature-{text}').child(f'News Item-{i+1}').get()
+    #     date_time_.append(news_features[0].val())
+    #     title.append(news_features[2].val())
+    #     desc.append(news_features[1].val())
+    #####################################################
         
 
         # news_features=db.child('Disaster-Data').child(f'News Feature-{text}').child(f'News Item-2').get()
@@ -78,7 +104,7 @@ def my_form_post():
     #     fetch_info_cricaddic()
     ############################################################################################
 
-    return render_template('timeline.html', title_=title, date_=date_time_, desc_=desc)
+    return render_template('timeline.html', title_=title, date_=date_time_, desc_=desc, num=no_items)
     
     # title_1=title_1, date_1=date_time_1, desc_1=desc_1, title_2=title_2, date_2=date_time_2, desc_2=desc_2, title_3=title_3, date_3=date_time_3, desc_3=desc_3, title_4=title_4, date_4=date_time_4, desc_4=desc_4
 
