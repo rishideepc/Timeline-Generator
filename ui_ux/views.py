@@ -9,14 +9,10 @@ import urllib, json
 import sqlite3
 import webbrowser
 
-
 # url ="https://console.firebase.google.com/project/flaskdb-576e5/database/flaskdb-576e5-default-rtdb/data/~2F"
 
 
-views= Blueprint('views', __name__)
-
-
-
+views = Blueprint('views', __name__)
 
 
 # @app.route('/')
@@ -26,17 +22,18 @@ views= Blueprint('views', __name__)
 def my_form():
     return render_template('base.html')
 
+
 @views.route('/', methods=['POST'])
 def my_form_post():
-    connect_=sqlite3.connect('timeline-data.db')
-    cursor_=connect_.cursor()
+    connect_ = sqlite3.connect('timeline-data.db')
+    cursor_ = connect_.cursor()
     text_keyword = request.form['keyword']
-    text_date_time= request.form['timeframe']
-    text_location= request.form['location']
+    text_date_time = request.form['timeframe']
+    text_location = request.form['location']
 
-    date_time_=[]
-    title=[]
-    desc=[]
+    date_time_ = []
+    title = []
+    desc = []
 
     # response_=  urllib.urlopen(url)
     # data=json.loads(response_.read())
@@ -49,12 +46,20 @@ def my_form_post():
         SELECT * FROM Disaster WHERE Type LIKE '{text_keyword}' AND Location LIKE '{text_location}'
     ''')
 
-    items=cursor_.fetchall()
-    no_items=len(items)
+    items = cursor_.fetchall()
+    no_items = 0
+    visited = {}
     for item in items:
+        group = (item[1][:16], item[3])
+        if group in visited:
+            if item[0] not in desc[visited[group]]:
+                desc[visited[group]] += "; " + item[0]
+            continue
+        visited[group] = no_items
         title.append(item[2])
         date_time_.append(item[1])
         desc.append(item[0])
+        no_items += 1
 
     connect_.commit()
     connect_.close()
@@ -66,29 +71,24 @@ def my_form_post():
     #     title.append(news_features[2].val())
     #     desc.append(news_features[1].val())
     #####################################################
-        
 
-        # news_features=db.child('Disaster-Data').child(f'News Feature-{text}').child(f'News Item-2').get()
-        # date_time_2=news_features[0].val()
-        # title_2=news_features[2].val()
-        # desc_2=news_features[1].val()
+    # news_features=db.child('Disaster-Data').child(f'News Feature-{text}').child(f'News Item-2').get()
+    # date_time_2=news_features[0].val()
+    # title_2=news_features[2].val()
+    # desc_2=news_features[1].val()
 
-        # news_features=db.child('Disaster-Data').child(f'News Feature-{text}').child(f'News Item-3').get()
-        # date_time_3=news_features[0].val()
-        # title_3=news_features[2].val()
-        # desc_3=news_features[1].val()
+    # news_features=db.child('Disaster-Data').child(f'News Feature-{text}').child(f'News Item-3').get()
+    # date_time_3=news_features[0].val()
+    # title_3=news_features[2].val()
+    # desc_3=news_features[1].val()
 
-        # news_features=db.child('Disaster-Data').child(f'News Feature-{text}').child(f'News Item-4').get()
-        # date_time_4=news_features[0].val()
-        # title_4=news_features[2].val()
-        # desc_4=news_features[1].val()
-
+    # news_features=db.child('Disaster-Data').child(f'News Feature-{text}').child(f'News Item-4').get()
+    # date_time_4=news_features[0].val()
+    # title_4=news_features[2].val()
+    # desc_4=news_features[1].val()
 
     # date_time_=sorted(date_time_)
-            
 
-
-    
     # return text.upper()
     # with open(f'info.txt', 'w') as f:
     #     f.write(f'Word: {text}')
@@ -105,10 +105,8 @@ def my_form_post():
     ############################################################################################
 
     return render_template('timeline.html', title_=title, date_=date_time_, desc_=desc, num=no_items)
-    
-    # title_1=title_1, date_1=date_time_1, desc_1=desc_1, title_2=title_2, date_2=date_time_2, desc_2=desc_2, title_3=title_3, date_3=date_time_3, desc_3=desc_3, title_4=title_4, date_4=date_time_4, desc_4=desc_4
 
-        
+    # title_1=title_1, date_1=date_time_1, desc_1=desc_1, title_2=title_2, date_2=date_time_2, desc_2=desc_2, title_3=title_3, date_3=date_time_3, desc_3=desc_3, title_4=title_4, date_4=date_time_4, desc_4=desc_4
 
     # processed_text = text.upper()
     # return processed_text
@@ -121,6 +119,3 @@ def my_form_post():
 
 # def home():
 #     return render_template("base.html")
-
-
-
