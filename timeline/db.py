@@ -1,6 +1,6 @@
 import pyrebase
-import websites.generic.gnews
-from websites.generic.ndtv import fetch_info_ndtv
+import genres.generic.gnews
+from genres.generic.ndtv import fetch_info_ndtv
 
 config= {
     "apiKey": "AIzaSyAMl-ofcpcF0zO3KmwAMuVYYFs-UqjWBCY",
@@ -15,5 +15,3 @@ config= {
 firebase=pyrebase.initialize_app(config)
 
 db=firebase.database()
-
-# db.child("Data").push({"Title":"Rishideep"})

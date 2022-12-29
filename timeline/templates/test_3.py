@@ -21,16 +21,16 @@ st = StanfordNERTagger('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\u
 					   'C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\ui_ux\\templates\\stanford-ner-2020-11-17\\stanford-ner.jar',
 					   encoding='utf-8')
 
-text = 'While in France, Christine Lagarde discussed short-term stimulus efforts in a recent interview with the Wall Street Journal.'
+text = 'While very high in France, Christine Lagarde discussed short-term stimulus efforts in a recent interview with the Wall Street Journal.'
 
 tokenized_text = word_tokenize(text)
 classified_text = st.tag(tokenized_text)
 
-# print(classified_text)
+print(classified_text)
 
-for word, tag in classified_text:
-	if tag=="LOCATION":
-		print(word)
+# for word, tag in classified_text:
+# 	if tag=="LOCATION":
+# 		print(word)
 
 
 

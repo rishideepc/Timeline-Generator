@@ -54,6 +54,12 @@ html{
     margin-bottom: 10px;
 }
 
+.timeline-content h3{
+    font-size: 15px;
+    line-height: 30px;
+    font-weight: 300;
+}
+
 .timeline-content p{
     font-size: 15px;
     line-height: 30px;

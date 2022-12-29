@@ -6,10 +6,12 @@ cursor_=connect_.cursor()
 
 cursor_.execute(f'''
 
-SELECT * FROM Disaster WHERE location LIKE '{keyword}'
+SELECT * FROM Disaster
 
 ''')
 
+
+# WHERE location LIKE '{keyword}'
 # print(cursor_.fetchall())
 items = cursor_.fetchall()
 for item in items:

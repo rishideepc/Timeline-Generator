@@ -38,7 +38,6 @@ def fetch_info_ndtv(keywords):
                     central_div=story_content.find('div')
                     paragraph= central_div.find('p').text
                     f.write(f'More Info: {paragraph}\n\n\n')
-
                     f.write(f'\n\nFile Saved: New Info')
 
 

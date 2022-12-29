@@ -1,38 +1,25 @@
 from ast import keyword
 from xmlrpc.client import DateTime
 import requests
-import json
 from bs4 import BeautifulSoup
-import pyrebase
+# import pyrebase
 import urllib, json
 import time
 from datetime import *
+
+# ########################################
 from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
+# ########################################
+
 import sqlite3
 
-st = StanfordNERTagger('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\ui_ux\\templates\\stanford-ner-2020-11-17\\classifiers\\english.all.3class.distsim.crf.ser.gz',
-					   'C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\ui_ux\\templates\\stanford-ner-2020-11-17\\stanford-ner.jar',
+st = StanfordNERTagger('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\timeline\\templates\\stanford-ner-2020-11-17\\classifiers\\english.all.3class.distsim.crf.ser.gz',
+					   'C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\timeline\\templates\\stanford-ner-2020-11-17\\stanford-ner.jar',
 					   encoding='utf-8')
 
-
-config= {
-                "apiKey": "AIzaSyAMl-ofcpcF0zO3KmwAMuVYYFs-UqjWBCY",
-                "authDomain": "flaskdb-576e5.firebaseapp.com",
-                "databaseURL": "https://flaskdb-576e5-default-rtdb.asia-southeast1.firebasedatabase.app",
-                "projectId": "flaskdb-576e5",
-                "storageBucket": "flaskdb-576e5.appspot.com",
-                "messagingSenderId": "1096383217352",
-                "appId": "1:1096383217352:web:243a244f597003ad566ffd"
-}
-firebase=pyrebase.initialize_app(config)
-
-db=firebase.database()
-
 # keywords for disaster class
-keywords_disaster=['landslide']
-# location=[]
-# keywords_disaster=['landslide', 'flood', 'earthquake', 'tsunami', 'flash flood']
+keywords_disaster=['landslide', 'earthquake', 'tsunami', 'flood']
 
 #####################################################
 # cronjob script
@@ -49,10 +36,6 @@ def fetch_info_gnews(keywords):
         data = res.content
         bs = BeautifulSoup(data, 'lxml')
         items = bs.find_all('item')
-        
-
-
-
             ###################################################################################
             ## convert str to datetime.datetime object and sort in firebase
             ###################################################################
@@ -85,14 +68,49 @@ def fetch_info_gnews(keywords):
             date_=date_time[1]+" "+date_time[2]+" "+date_time[3]
             type_= keywords[i]
             location="None"
+            severity="None"
             tokenized_text = word_tokenize(title)   
             classified_text = st.tag(tokenized_text)
             for word, tag in classified_text:
                 if tag=="LOCATION":
                     # db.child(f'{today.strftime("%b-%d-%Y")}').child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(f'News Item-{index+1}').update({"Location":word})
                     location=word
-            set_=(title, date_, type_, location, cron_job_date_)
-            cursor_.execute("INSERT INTO Disaster values(?, ?, ?, ?, ?)", set_)
+
+            #defining severity
+            # x=0
+            # adjective="None"
+            # if f"past {x} years" in title:
+            #     if x>15:
+            #         severity="Very High"
+            #     elif x>10:
+            #         severity="High"
+            # elif f"{adjective} in {x} years" in title:
+            #     if adjective=="greatest" or adjective=="highest" or adjective=="largest" or adjective=="worst":
+            #         if x>15:
+            #             severity="Very High"
+            #         elif x>10:
+            #             severity="High"
+            #     else:
+            #         severity="Can't determine severity with accuracy"
+            
+            # elif f"{x} people" or f"{x} people affected" or f"{x} people dead" in title:
+            #     if x>15:
+            #         severity="Very High"
+            #     elif x>10:
+            #         severity="High"
+            #     else:
+            #         severity="Moderate"            
+
+            # elif "collapse" in title:
+            #     severity="Moderate"
+
+            # else:
+            #     severity="Low"
+
+            #ending severity definition
+
+            set_=(title, date_, type_, location, severity, cron_job_date_)
+            cursor_.execute("INSERT INTO Disaster values(?, ?, ?, ?, ?, ?)", set_)
     
             # db.child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(location).child(f'News-Item-{index+1}').update({"Title":title})
             # db.child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(location).child(f'News-Item-{index+1}').update({"Date-Time":date_time})
@@ -164,6 +182,8 @@ def fetch_info_gnews(keywords):
 
 #         else:
 #             break
+
+
     connect_.commit()
     connect_.close()
 
@@ -172,17 +192,3 @@ if __name__=="__main__":
     ########################################  **FUNCTION CALL**   ################################
     fetch_info_gnews(keywords_disaster)
     ######################################## ---X-------X------  ################################
-
-    # x=db.child(f'{today.strftime("%b-%d-%Y")}').child('Disaster-Data').child(f'News Feature-landslide').child(f'News Item-15').child('Location').get().val()
-    # db.child(f'{today.strftime("%b-%d-%Y")}').child("Disaster-Data").child(f'News Feature-landslide').child(f'News Item-17').order_by_key().order_by_child('Location').equal_to(x).remove()
-    # print(db.child(f'{today.strftime("%b-%d-%Y")}').child('Disaster-Data').child(f'News Feature-landslide').child(f'News Item-15').child('Location').get().val())
-    ### 15 && 17
-
-
-    # time.sleep(10)
-    # url="https://console.firebase.google.com/project/flaskdb-576e5/database/flaskdb-576e5-default-rtdb/data/~2F"
-    # response_=  urllib.urlopen(url)
-    # data=json.loads(response_.read())
-    # print(data)
-    # r=requests.get()
-    # print(r.json())

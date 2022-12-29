@@ -8,19 +8,6 @@
     <link rel="stylesheet" href="./../static/timeline.css">
     <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        window.onload = function() {
-            document.getElementById('date-year').innerHTML="20th May 2019";
-        }
-    </script>
-    <py-env>
-        - beautifulsoup4
-        - requests
-        - flask
-        - paths:
-          - ./test_2.py
-          <!-- - C:\Users\HP\Desktop\Python_AI\Timeline_Generator\information -->
-      </py-env>
     <title>Timeline</title>
 </head>
 <body>
@@ -34,12 +21,17 @@
                         <h2 class="date">{{date_[i]}}</h2>
                         {% endif %}
                         {%if title_[i]%}
-                        <h1>{{title_[i]}}</h1>
+                        <h2>{{title_[i]}}</h2>
                         {% endif %}
                         {% if desc_[i] %}
                         <p>
                             {{desc_[i]}}
                         </p>
+                        {% endif %}
+                        {% if severity_[i] %}
+                        <h3>
+                            {{severity_[i]}}
+                        </h3>
                         {% endif %}
                     </div>
                 </li>
