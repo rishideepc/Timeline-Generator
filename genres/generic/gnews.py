@@ -2,27 +2,83 @@ from ast import keyword
 from xmlrpc.client import DateTime
 import requests
 from bs4 import BeautifulSoup
-# import pyrebase
 import urllib, json
 import time
 from datetime import *
-
-# ########################################
+import re
+############################################################
 from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
-# ########################################
-
+############################################################
+import numpy as np
+import pandas as pd
+from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk.corpus import stopwords
+from sklearn.metrics import accuracy_score
+from nltk.tokenize import word_tokenize
+import matplotlib.pyplot as plt
+import seaborn as sns
+import re
 import sqlite3
+import string
+###########################################################
 
+# Initialization script
 st = StanfordNERTagger('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\timeline\\templates\\stanford-ner-2020-11-17\\classifiers\\english.all.3class.distsim.crf.ser.gz',
 					   'C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\timeline\\templates\\stanford-ner-2020-11-17\\stanford-ner.jar',
 					   encoding='utf-8')
 
-# keywords for disaster class
-keywords_disaster=['landslide', 'earthquake', 'tsunami', 'flood']
+# Keywords for Disaster Class
+# keywords_disaster=['landslide', 'earthquake', 'tsunami', 'flood']
+keywords_disaster= ['landslide']
 
-#####################################################
-# cronjob script
+
+############## ******************TRAINING THE SEVERITY MODEL*********************** #########################
+def severity_model(title):
+    data= pd.read_excel('C:/Users/HP/Desktop/Python_AI/Timeline_Generator/genres/generic/severity_label/Labelled.xlsx')
+
+    ################################ Data cleansing ##################################
+    for j in range(0, 596):
+        data['Label'][j]=data['Label'][j].lower()
+        data['Label'][j]=re.sub(" ", "", data['Label'][j])
+        data['News-Item'][j]=re.sub('https?://\S+|www\.\S+', '', data['News-Item'][j])
+        data['News-Item'][j]=re.sub('\[.*?\]', '', data['News-Item'][j])
+        data['News-Item'][j]=re.sub('<.*?>+', '', data['News-Item'][j])
+        data['News-Item'][j]=re.sub('\w*\d\w*', '', data['News-Item'][j])  
+    ############################### XXXXXXXXXXXXXXXX ################################
+    X_train= data['News-Item']  # Feature Column
+    y_train= data['Label']  # Target Colum
+     ###################### Vectorization && Transformation ####################################
+    vectorization= TfidfVectorizer()
+    xv_train= vectorization.fit_transform(X_train)
+    ##################### XXXXXXXXXXXXXXXXXXXXXXXXXX ################################
+
+    ###################### Training #################################################
+    model_gini= DecisionTreeClassifier(criterion="gini", random_state=123, max_depth=10, min_samples_leaf=6)
+    model_gini.fit(xv_train, y_train)
+
+    ############### Fetch Assessment Data & Vectorize ######################
+    X_test= pd.Series(title)
+    xv_test= vectorization.transform(X_test)
+
+    ############## Assessment #####################
+    def prediction(X_test, model_object):
+        y_pred= model_object.predict(xv_test)
+        # print("Predicted values: ")
+        return y_pred
+    ##############################################
+    # model_gini= DecisionTreeClassifier(criterion="gini", random_state=123, max_depth=10, min_samples_leaf=6)
+    # model_gini.fit(xv_train, y_train)
+    y_pred_gini=prediction(xv_test, model_gini)
+    severity_label=y_pred_gini
+    return severity_label
+############################ *************SEVERITY ENDS************* #######################################
+
+#####################################################################################
+# Cronjob script
 today= date.today()
 cron_job_date_=f'{today.strftime("%b-%d-%Y")}'
 def fetch_info_gnews(keywords):          
@@ -36,30 +92,6 @@ def fetch_info_gnews(keywords):
         data = res.content
         bs = BeautifulSoup(data, 'lxml')
         items = bs.find_all('item')
-            ###################################################################################
-            ## convert str to datetime.datetime object and sort in firebase
-            ###################################################################
-            # date_time = datetime.strptime(date_time_str, '%a, %d %b %Y %H:%M:%S %Z')
-            # date_time.sort()
-            # print(type(date_time))
-            # date_time = json.dumps(date_time, default=str)
-            # print(type(date_time))
-            # date_time.sort()
-            #################################################################
-            # class DTEncoder(json.JSONEncoder):
-            #         def default(self, obj):
-            #             #  if passed in object is datetime object
-            #             # convert it to a string
-            #             if isinstance(obj, datetime):
-            #                 return str(obj)
-            #             #  otherwise use the default behavior
-            #             return json.JSONEncoder.default(self, obj)
-
-            # date_time = json.dumps(date_time, cls=DTEncoder)
-            # print(type(date_time))
-            ###################################################################################
-
-################################################################################################
         
 
         for index, item in enumerate(items):
@@ -68,7 +100,7 @@ def fetch_info_gnews(keywords):
             date_=date_time[1]+" "+date_time[2]+" "+date_time[3]
             type_= keywords[i]
             location="None"
-            severity="None"
+            casualty_injured="None"
             tokenized_text = word_tokenize(title)   
             classified_text = st.tag(tokenized_text)
             for word, tag in classified_text:
@@ -76,64 +108,40 @@ def fetch_info_gnews(keywords):
                     # db.child(f'{today.strftime("%b-%d-%Y")}').child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(f'News Item-{index+1}').update({"Location":word})
                     location=word
 
-            #defining severity
-            # x=0
-            # adjective="None"
-            # if f"past {x} years" in title:
-            #     if x>15:
-            #         severity="Very High"
-            #     elif x>10:
-            #         severity="High"
-            # elif f"{adjective} in {x} years" in title:
-            #     if adjective=="greatest" or adjective=="highest" or adjective=="largest" or adjective=="worst":
-            #         if x>15:
-            #             severity="Very High"
-            #         elif x>10:
-            #             severity="High"
-            #     else:
-            #         severity="Can't determine severity with accuracy"
+            temp=re.compile(r'dead|Death|death|Dead|killed|Killed|buries|Buries|buried|Buried|kill|Kill|kills|Kills').search(title)
+            if not temp:
+                temp_2=re.compile(r'injured|Injured|hit|Hit|hits|Hits|trapped|Trapped|feared|Feared|threat|Threat').search(title)
+                if not temp_2:
+                    casualty_injured="Casualty not found"
+                else:
+                    temp_3=re.compile(r' \d\d\d | \d\d | \d ').search(title)
+                    if not temp_3:
+                        casualty_injured= "Casualty found - Couldn't detect count of injured."
+
+                    else:
+                        casualty_injured= f"Injuries: {temp_3.group()}"
+            else:
+
+                temp_1=re.compile(r' \d\d\d | \d\d | \d ').search(title)
+                if not temp_1:
+                    casualty_injured= "Casualty Found - Couldn't detect count of casualities."
+
+                else:
+                    casualty_injured= f"Casualties: {temp_1.group()}"
+
+
             
-            # elif f"{x} people" or f"{x} people affected" or f"{x} people dead" in title:
-            #     if x>15:
-            #         severity="Very High"
-            #     elif x>10:
-            #         severity="High"
-            #     else:
-            #         severity="Moderate"            
-
-            # elif "collapse" in title:
-            #     severity="Moderate"
-
-            # else:
-            #     severity="Low"
-
-            #ending severity definition
-
-            set_=(title, date_, type_, location, severity, cron_job_date_)
-            cursor_.execute("INSERT INTO Disaster values(?, ?, ?, ?, ?, ?)", set_)
+            severity_label=severity_model(title=title)
+            set_=(title, date_, type_, location, casualty_injured, severity_label[0], cron_job_date_)
+            cursor_.execute("INSERT INTO Disaster values(?, ?, ?, ?, ?, ?, ?)", set_)
     
-            # db.child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(location).child(f'News-Item-{index+1}').update({"Title":title})
-            # db.child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(location).child(f'News-Item-{index+1}').update({"Date-Time":date_time})
-            # db.child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(location).child(f'News-Item-{index+1}').update({"Type":type_})
-            # db.child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(location).child(f'News-Item-{index+1}').update({"CronJob-Date":cron_job_date_})
-
-
-
-
-            # db.child(f'{today.strftime("%b-%d-%Y")}').child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(f'News Item-{index+1}').update({"Title":title})
-            # db.child(f'{today.strftime("%b-%d-%Y")}').child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(f'News Item-{index+1}').update({"Date-Time":date_time})
-            # db.child(f'{today.strftime("%b-%d-%Y")}').child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(f'News Item-{index+1}').update({"Type":type_})
-            # db.child(f'{today.strftime("%b-%d-%Y")}').child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(f'News Item-{index+1}').update({"Location":""})
-            
-            
-            
-            # x=db.child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(f'News Item-{index+1}').get()
-            # x_=x.val()
             print(f'''
                 {index+1}.  Title: {title}
                     Event Date-time: {date_}
                     Event Type: {type_}
                     Location: {location}
+                    Casualty/Injured: {casualty_injured}
+                    Severity: {severity_label[0]}
                             \n
                 ''')
 

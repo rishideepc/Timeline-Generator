@@ -27,7 +27,9 @@ def my_form_post():
     date_time_ = []
     title = []
     desc = []
-    disaster_severity= []
+    casualty_injured= []
+    severity= []
+
 
 
     cursor_.execute(f'''
@@ -50,10 +52,11 @@ def my_form_post():
         title.append(item[2])
         date_time_.append(item[1])
         desc.append(item[0])
-        disaster_severity.append(item[4])
+        casualty_injured.append(item[4])
+        severity.append(item[5])
         no_items += 1
 
     connect_.commit()
     connect_.close()
 
-    return render_template('timeline.html', title_=title, date_=date_time_, desc_=desc, num=no_items, severity_=disaster_severity)
+    return render_template('timeline.html', title_=title, date_=date_time_, desc_=desc, num=no_items, casualty_injured_=casualty_injured, severity_=severity)

@@ -28,59 +28,19 @@
                             {{desc_[i]}}
                         </p>
                         {% endif %}
+                        {% if casualty_injured_[i] %}
+                        <h3>
+                            {{casualty_injured_[i]}}
+                        </h3>
+                        {% endif %}
                         {% if severity_[i] %}
                         <h3>
-                            {{severity_[i]}}
+                            Predicted Severity: {{severity_[i]}}
                         </h3>
                         {% endif %}
                     </div>
                 </li>
                 {% endfor %}
-                <!-- <li>
-                    <div class="timeline-content">
-                        {%if date_2%}
-                        <h2 class="date">{{date_2}}</h2>
-                        {% endif %}
-                        {%if title_2%}
-                        <h1>{{title_2}}</h1>
-                        {% endif %}
-                        {% if desc_2 %}
-                        <p>
-                            {{desc_2}}
-                        </p>
-                        {% endif %}
-                    </div>
-                </li>
-                <li>
-                    <div class="timeline-content">
-                        {%if date_3%}
-                        <h2 class="date">{{date_3}}</h2>
-                        {% endif %}
-                        {%if title_3%}
-                        <h1>{{title_3}}</h1>
-                        {% endif %}
-                        {% if desc_3 %}
-                        <p>
-                            {{desc_3}}
-                        </p>
-                        {% endif %}
-                    </div>
-                </li>
-                <li>
-                    <div class="timeline-content">
-                        {%if date_4 %}
-                        <h2 class="date">{{date_4}}</h2>
-                        {% endif %}
-                        {%if title_4%}
-                        <h1>{{title_4}}</h1>
-                        {% endif %}
-                        {% if desc_4 %}
-                        <p>
-                            {{desc_4}}
-                        </p>
-                        {% endif %}
-                    </div>
-                </li> -->
             </ul>
         </div>
     </div>
