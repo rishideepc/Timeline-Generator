@@ -23,7 +23,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import re
 import sqlite3
-import string
 ###########################################################
 
 # Initialization script
@@ -105,7 +104,6 @@ def fetch_info_gnews(keywords):
             classified_text = st.tag(tokenized_text)
             for word, tag in classified_text:
                 if tag=="LOCATION":
-                    # db.child(f'{today.strftime("%b-%d-%Y")}').child("Disaster-Data").child(f'News Feature-{keywords[i]}').child(f'News Item-{index+1}').update({"Location":word})
                     location=word
 
             temp=re.compile(r'dead|Death|death|Dead|killed|Killed|buries|Buries|buried|Buried|kill|Kill|kills|Kills').search(title)
