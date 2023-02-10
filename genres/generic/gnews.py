@@ -15,10 +15,13 @@ import pandas as pd
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
+from sklearn import svm
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.corpus import stopwords
 from sklearn.metrics import accuracy_score
 from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer, PorterStemmer
+import nltk
 import matplotlib.pyplot as plt
 import seaborn as sns
 import re
@@ -57,6 +60,7 @@ def severity_model(title):
 
     ###################### Training #################################################
     model_gini= DecisionTreeClassifier(criterion="gini", random_state=123, max_depth=10, min_samples_leaf=6)
+    # model_gini=svm.SVC(kernel='linear')
     model_gini.fit(xv_train, y_train)
 
     ############### Fetch Assessment Data & Vectorize ######################
@@ -69,15 +73,13 @@ def severity_model(title):
         # print("Predicted values: ")
         return y_pred
     ##############################################
-    # model_gini= DecisionTreeClassifier(criterion="gini", random_state=123, max_depth=10, min_samples_leaf=6)
-    # model_gini.fit(xv_train, y_train)
     y_pred_gini=prediction(xv_test, model_gini)
     severity_label=y_pred_gini
     return severity_label
 ############################ *************SEVERITY ENDS************* #######################################
 
-#####################################################################################
-# Cronjob script
+##############################*********************CRON JOB SCRIPT*********************#######################################################
+
 today= date.today()
 cron_job_date_=f'{today.strftime("%b-%d-%Y")}'
 def fetch_info_gnews(keywords):          
@@ -98,21 +100,23 @@ def fetch_info_gnews(keywords):
             date_time=item.pubdate.string.split(' ')
             date_=date_time[1]+" "+date_time[2]+" "+date_time[3]
             type_= keywords[i]
-            location="None"
-            casualty_injured="None"
+            location="none"
+            casualty_injured="none"
             tokenized_text = word_tokenize(title)   
             classified_text = st.tag(tokenized_text)
             for word, tag in classified_text:
                 if tag=="LOCATION":
                     location=word
-
-            temp=re.compile(r'dead|Death|death|Dead|killed|Killed|buries|Buries|buried|Buried|kill|Kill|kills|Kills').search(title)
+            ############################### CASUALTY COUNT - REGEX ##########################################
+            ps= PorterStemmer()
+            stemmed_output= ' '.join([ps.stem(t) for t in tokenized_text])
+            temp=re.compile(r'die|death|dead|deadli|kill|buri').search(stemmed_output)
             if not temp:
-                temp_2=re.compile(r'injured|Injured|hit|Hit|hits|Hits|trapped|Trapped|feared|Feared|threat|Threat').search(title)
+                temp_2=re.compile(r'injuri|injur|hit|trap|fear|threat|threaten|hurt').search(stemmed_output)
                 if not temp_2:
                     casualty_injured="Casualty not found"
                 else:
-                    temp_3=re.compile(r' \d\d\d | \d\d | \d ').search(title)
+                    temp_3=re.compile(r' \d\d\d | \d\d | \d ').search(stemmed_output)
                     if not temp_3:
                         casualty_injured= "Casualty found - Couldn't detect count of injured."
 
@@ -120,26 +124,26 @@ def fetch_info_gnews(keywords):
                         casualty_injured= f"Injuries: {temp_3.group()}"
             else:
 
-                temp_1=re.compile(r' \d\d\d | \d\d | \d ').search(title)
+                temp_1=re.compile(r' \d\d\d | \d\d | \d ').search(stemmed_output)
                 if not temp_1:
                     casualty_injured= "Casualty Found - Couldn't detect count of casualities."
 
                 else:
                     casualty_injured= f"Casualties: {temp_1.group()}"
 
-
+            ####################################################################################################
             
             severity_label=severity_model(title=title)
-            set_=(title, date_, type_, location, casualty_injured, severity_label[0], cron_job_date_)
+            set_=(title.lower(), date_, type_.lower(), location.lower(), casualty_injured, severity_label[0].lower(), cron_job_date_)
             cursor_.execute("INSERT INTO Disaster values(?, ?, ?, ?, ?, ?, ?)", set_)
     
             print(f'''
-                {index+1}.  Title: {title}
+                {index+1}.  Title: {title.lower()}
                     Event Date-time: {date_}
-                    Event Type: {type_}
-                    Location: {location}
+                    Event Type: {type_.lower()}
+                    Location: {location.lower()}
                     Casualty/Injured: {casualty_injured}
-                    Severity: {severity_label[0]}
+                    Severity: {severity_label[0].lower()}
                             \n
                 ''')
 
@@ -198,3 +202,6 @@ if __name__=="__main__":
     ########################################  **FUNCTION CALL**   ################################
     fetch_info_gnews(keywords_disaster)
     ######################################## ---X-------X------  ################################
+
+
+#########################################********CRON JOB ENDS*************##############################

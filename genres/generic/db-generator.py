@@ -4,21 +4,21 @@ connect_=sqlite3.connect('timeline-data.db')
 
 cursor_=connect_.cursor()
 
-cursor_.execute("""
+# cursor_.execute("""
 
 
-    CREATE TABLE Disaster (
-        Title text, 
-        DateTime text, 
-        Type text, 
-        Location text, 
-        Casualty_Injury text, 
-        Severity_Label text,
-        CronJobDate text
-    )
+#     CREATE TABLE Disaster (
+#         Title text, 
+#         DateTime text, 
+#         Type text, 
+#         Location text, 
+#         Casualty_Injury text, 
+#         Severity_Label text,
+#         CronJobDate text
+#     )
 
 
-""")
+# """)
 
 # cursor_.execute("""
 
@@ -28,13 +28,13 @@ cursor_.execute("""
 # """)
 
 
-# cursor_.execute("""
+cursor_.execute("""
 
-#     SELECT * FROM Disaster
+    SELECT * FROM Disaster
 
-# """)
+""")
 
-# print(cursor_.fetchall())
+print(cursor_.fetchall())
 
 
 connect_.commit()

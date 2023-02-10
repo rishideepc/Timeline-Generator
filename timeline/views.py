@@ -15,6 +15,10 @@ views = Blueprint('views', __name__)
 def my_form():
     return render_template('base.html')
 
+@views.route('/about')
+def my_form_about():
+    return render_template('about.html')
+
 
 @views.route('/', methods=['POST'])
 def my_form_post():
@@ -34,9 +38,12 @@ def my_form_post():
 
     cursor_.execute(f'''
 
-        SELECT * FROM Disaster WHERE Type LIKE '{text_keyword}' AND Location LIKE '{text_location}'
+        SELECT * FROM Disaster WHERE (Type LIKE '{text_keyword}' AND Location LIKE '{text_location}' AND DateTime LIKE '{text_date_time}') OR (Type LIKE '{text_keyword}' AND Location LIKE '{text_location}') OR (Type LIKE '{text_keyword}')
 
     ''')
+
+        # SELECT * FROM Disaster WHERE Type LIKE '{text_keyword}' AND Location LIKE '{text_location}'
+
 
     items = cursor_.fetchall()
 

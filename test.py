@@ -1,20 +1,6 @@
-import re
 import pandas as pd
 
-data= pd.read_excel("Labelled.xlsx")
+data= pd.read_excel('C:/Users/HP/Desktop/Python_AI/Timeline_Generator/genres/generic/severity_label/Labelled.xlsx')
 
-replacement=(r"/d. ", "")
-
-for i in range(0, 496):
-    data["News-Item"][i]=re.sub(r"\d\d. ", "", data["News-Item"][i])
-    data["News-Item"][i]=re.sub(r"\d. ", "", data["News-Item"][i])
-    print(data["News-Item"][i])
-
-import nltk
-
-nltk.download()
-
-
-
-
+print(data['Label'].value_counts())
 
