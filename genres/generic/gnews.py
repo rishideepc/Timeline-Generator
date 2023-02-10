@@ -59,8 +59,8 @@ def severity_model(title):
     ##################### XXXXXXXXXXXXXXXXXXXXXXXXXX ################################
 
     ###################### Training #################################################
-    model_gini= DecisionTreeClassifier(criterion="gini", random_state=123, max_depth=10, min_samples_leaf=6)
-    # model_gini=svm.SVC(kernel='linear')
+    # model_gini= DecisionTreeClassifier(criterion="gini", random_state=123, max_depth=10, min_samples_leaf=6)
+    model_gini=svm.SVC(kernel='linear')
     model_gini.fit(xv_train, y_train)
 
     ############### Fetch Assessment Data & Vectorize ######################
