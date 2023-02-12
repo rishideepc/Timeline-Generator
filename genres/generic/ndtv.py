@@ -15,7 +15,7 @@ keywords_generic=['politics', 'sports', 'economics', 'disaster']
 
 def fetch_info_ndtv(keywords):
     len_=len(keywords)
-    for i in len_:
+    for i in range(0, len_):
         html_text=requests.get('https://www.ndtv.com/search?searchtext='f'{keywords}''')
         # webbrowser.open('https://www.ndtv.com/search?searchtext='f'{keyword}''')
         soup=BeautifulSoup(html_text.content, 'lxml')
@@ -55,3 +55,5 @@ def fetch_info_ndtv(keywords):
 
 
 ##########################################################################################
+if __name__=='__main__':
+    fetch_info_ndtv(keywords="business")
