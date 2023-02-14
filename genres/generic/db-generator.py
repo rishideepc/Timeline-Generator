@@ -34,7 +34,7 @@ cursor_.execute("""
 
 """)
 
-print(cursor_.fetchall())
+# print(cursor_.fetchall())
 
 
 connect_.commit()

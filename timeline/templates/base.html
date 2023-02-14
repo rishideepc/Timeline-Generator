@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,8 +13,8 @@
     <title>Python Timeline Generator</title>
 </head>
 <body>
-  <nav class="flex items-center justify-between flex-wrap bg-blue-400 p-6">
-    <div class="flex items-center flex-shrink-0 text-white dark:slate-800 mr-6">
+  <nav class="flex items-center justify-between flex-wrap bg-blue-400 dark:bg-blue-800 p-6">
+    <div class="flex items-center flex-shrink-0 text-white mr-6">
       <!-- <i class='fab fa-python' style='font-size:36px'></i> -->
       <span class="font-semibold text-xl tracking-tight">PyTimeline-Generator</span>
     </div>
@@ -44,29 +44,29 @@
       <!-- *************************************************************************************************** -->
         <div class="mb-4">
             <form method="POST">
-                <label class="block text-grey-darker text-sm font-bold mb-2" for="keyword">
+                <label class="block text-grey-darker dark:text-white text-sm font-bold mb-2" for="keyword">
                     Keyword
                 </label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker" id="keyword" name="keyword" type="text" placeholder="E.g. earthquake">
                 <p><br></p>
-                <label class="block text-grey-darker text-sm font-bold mb-2" for="timeframe">
+                <label class="block text-grey-darker dark:text-white text-sm font-bold mb-2" for="timeframe">
                     Time Window
                 </label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker" id="timeframe" name="timeframe" type="text"  placeholder="E.g. 2019">
                 <p><br></p>
-                <label class="block text-grey-darker text-sm font-bold mb-2" for="location">
+                <label class="block text-grey-darker dark:text-white text-sm font-bold mb-2" for="location">
                     Location
                 </label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker" id="location" name="location" type="text" placeholder="E.g. London">
                 <p><br></p>
                 <div class="mb-2">
-                <button class="bg-transparent hover:bg-blue-400 text-blue-400 font-semibold hover:text-white py-1 px-3 border border-blue-400 hover:border-transparent rounded" type="button">
+                <button class="bg-transparent hover:bg-blue-400 dark:hover:bg-blue-700 text-blue-400 dark:text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-400 dark:border-blue-700 hover:border-transparent rounded" type="button">
                   <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"><input type="submit" ></a>
                 </button>
                 </div>
                 <br>
                 <div class="mb-2">
-                  <button class="bg-transparent hover:bg-blue-400 text-blue-400 font-semibold hover:text-white py-1 px-3 border border-blue-400 hover:border-transparent rounded" type="button">
+                  <button class="bg-transparent hover:bg-blue-400 dark:hover:bg-blue-700 text-blue-400 dark:text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-400 dark:border-blue-700 hover:border-transparent rounded" type="button">
                     <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="/timeline">Conference Article</a>
                   </button>
                 </div>
@@ -102,7 +102,7 @@
     </div>
     <!-- ********************************************************************************************************** -->
     
-    <footer class="text-center lg:text-left bg-blue-400">
+    <footer class="text-center lg:text-left bg-blue-400 dark:bg-blue-800">
       <div class="text-white text-center p-4">
         © 2023 Copyright:
         <a class="text-white" href="https://tailwind-elements.com/">Dept. of Computer Science, Jadavpur University</a>

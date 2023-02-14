@@ -56,3 +56,29 @@ print(classified_text)
 # today= date.today()
 # cron_job_date_=f'{today.strftime("%b-%d-%Y")}'
 # print(cron_job_date_)
+
+#########################################################################################
+# from num2words import *
+# from word2number import w2n
+
+
+# def has_number_words(sentence):
+#     words= sentence.split()
+
+#     for word in words:
+#         try:
+#             num = w2n.word_to_num(word)
+#             return True, num
+#         except ValueError:
+#             continue
+#     return False
+
+# if __name__=='__main__':
+#     if has_number_words("five is grown") == False:
+#         casualty_injured= "Casualty Found - Couldn't detect count of casualities."
+
+#     else:
+#         _, casualty_value= has_number_words("five is grown")
+#         casualty_injured= f"Casualties: {casualty_value}"               
+                    
+#     print(casualty_injured)

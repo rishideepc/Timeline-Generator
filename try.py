@@ -58,6 +58,3 @@ for sentence in data:
 print("Total incorrectly labelled data", c)
 
 
-
-    
- 

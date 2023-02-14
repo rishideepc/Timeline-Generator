@@ -27,6 +27,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import re
 import sqlite3
+from word2number import w2n
 ###########################################################
 
 # Initialization script
@@ -38,6 +39,18 @@ st = StanfordNERTagger('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\t
 # keywords_disaster=['landslide', 'earthquake', 'tsunami', 'flood']
 keywords_disaster= ['landslide']
 
+######################## ************ CHECKING STRING NUMERICALS *************** ####################
+def has_number_words(sentence):
+    words= sentence.split()
+
+    for word in words:
+        try:
+            num = w2n.word_to_num(word)
+            return True, num
+        except ValueError:
+            continue
+    return False
+########################## *************************XXXXXXXXXXXXXX*************** ########################
 
 ############## ******************TRAINING THE SEVERITY MODEL*********************** #########################
 def severity_model(title):
@@ -127,7 +140,13 @@ def fetch_info_gnews(keywords):
 
                 temp_1=re.compile(r' \d\d\d | \d\d | \d ').search(stemmed_output)
                 if not temp_1:
-                    casualty_injured= "Casualty Found - Couldn't detect count of casualities."
+                    if has_number_words(title) == False:
+                        casualty_injured= "Casualty Found - Couldn't detect count of casualities."
+                    
+                    else:
+                        _, casualty_value= has_number_words(title)
+                        casualty_injured= f"Casualties: {casualty_value}"
+
 
                 else:
                     casualty_injured= f"Casualties: {temp_1.group()}"
