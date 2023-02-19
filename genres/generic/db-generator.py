@@ -7,9 +7,9 @@ cursor_=connect_.cursor()
 # cursor_.execute("""
 
 
-#     CREATE TABLE Disaster (
+#     CREATE TABLE Landslide (
 #         Title text, 
-#         DateTime text, 
+#         Paragraph text, 
 #         Type text, 
 #         Location text, 
 #         Casualty_Injury text, 
@@ -30,11 +30,11 @@ cursor_=connect_.cursor()
 
 cursor_.execute("""
 
-    SELECT * FROM Disaster
+    SELECT * FROM Landslide
 
 """)
 
-# print(cursor_.fetchall())
+print(cursor_.fetchall())
 
 
 connect_.commit()
