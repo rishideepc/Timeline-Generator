@@ -22,8 +22,7 @@ cursor_=connect_.cursor()
 
 # cursor_.execute("""
 
-
-#     DROP TABLE Disaster;
+#     DROP TABLE Landslide;
 
 # """)
 

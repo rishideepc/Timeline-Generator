@@ -113,6 +113,8 @@ def has_number_words(sentence):
     return False
 ########################## ***************************************** ########################
 
+
+
 ############## ******************TRAINING THE SEVERITY MODEL*********************** #########################
 def severity_model(title):
     data= pd.read_excel('C:/Users/HP/Desktop/Python_AI/Timeline_Generator/genres/generic/severity_label/Labelled.xlsx')
@@ -153,6 +155,8 @@ def severity_model(title):
     return severity_label
 ############################ *************SEVERITY ENDS************* #######################################
 
+
+
 ##############################*********************CRON JOB SCRIPT*********************#######################################################
 today= date.today()
 cron_job_date_=f'{today.strftime("%b-%d-%Y")}'
@@ -162,62 +166,109 @@ def fetch_gnews_article(keyword):
     gn= GoogleNews()
     articles= gn.search(f'{keyword}')
     for index, article in enumerate(articles['entries']):
-        title=article.get('title')
-        link=article.get('link')
-        html=requests.get(url=link)
-        soup=BeautifulSoup(html.content, 'lxml')
-        paragraphs= soup.find_all('p', text=True)
-        content = '\n'.join([para.string for para in paragraphs])
-        content = content.strip()
-        type_=keyword
-        location="none"
-        casualty_injured="none"
-        tokenized_text= word_tokenize(content)
-        classified_text= st.tag(tokenized_text)
-        for word, tag in classified_text:
-            if tag=="LOCATION":
-                location=word
+        if index<10:
+            title=article.get('title')
+            link=article.get('link')
+            pubdate=article.get('published')
+            print("PUBLISHED DATE: ", pubdate)
+            html=requests.get(url=link)
+            soup=BeautifulSoup(html.content, 'lxml')
+            paragraphs= soup.find_all('p', text=True)
+            content = '\n'.join([para.string for para in paragraphs])
+            content = content.strip()
+            type_=keyword
+            location="none"
+            casualty_injured="none"
+            tokenized_text= word_tokenize(title)
+            classified_text= st.tag(tokenized_text)
+            for word, tag in classified_text:
+                if tag=="LOCATION":
+                    location=word
 
-        ps= PorterStemmer()
-        stemmed_output=' '.join([ps.stem(t) for t in tokenized_text])
-        temp=re.compile(r'die|death|dead|deadli|kill|buri').search(stemmed_output)
-        if not temp:
-            temp_2=re.compile(r'injuri|injur|hit|trap|fear|threat|threaten|hurt').search(stemmed_output)
-            if not temp_2:
-                casualty_injured="Casualty not found"
-            else:
-                temp_3=re.compile(r' \d\d\d | \d\d | \d ').search(stemmed_output)
-                if not temp_3:
-                    casualty_injured= "Casualty found - Couldn't detect count of injured."
+                if location=="none":
+                    tokenized_text= word_tokenize(content)
+                    classified_text= st.tag(tokenized_text)
+                    for word, tag in classified_text:
+                        if tag=="LOCATION":
+                            location=word
+            flag=1
+            ps= PorterStemmer()
+            stemmed_output=' '.join([ps.stem(t) for t in title])
+            temp=re.compile(r'die|death|dead|deadli|kill|buri').search(stemmed_output)
+            if not temp:
+                temp_2=re.compile(r'injuri|injur|hit|trap|fear|threat|threaten|hurt').search(stemmed_output)
+                if not temp_2:
+                    casualty_injured="Casualty or injury not found"
+                    flag=0
+
                 else:
+                    temp_3=re.compile(r' \d\d\d | \d\d | \d ').search(stemmed_output)
+                    if not temp_3:
+                        casualty_injured= "Injury found - Couldn't detect count of injured."
+                        # flag=0
+                    else:
                         casualty_injured= f"Injuries: {temp_3.group()}"
-        else:
-            temp_1=re.compile(r' \d\d\d | \d\d | \d ').search(stemmed_output)
-            if not temp_1:
-                if has_number_words(content) == False:
-                    casualty_injured= "Casualty Found - Couldn't detect count of casualities."
-                
-                else:
-                    _, casualty_value= has_number_words(content)
-                    casualty_injured= f"Casualties: {casualty_value}"
             else:
-                casualty_injured= f"Casualties: {temp_1.group()}"
+                temp_1=re.compile(r' \d\d\d | \d\d | \d ').search(stemmed_output)
+                if not temp_1:
+                    if has_number_words(title) == False:
+                        casualty_injured= "Casualty Found - Couldn't detect count of casualities."
+                        # flag=0
+                    
+                    else:
+                        _, casualty_value= has_number_words(title)
+                        casualty_injured= f"Casualties: {casualty_value}"
+                else:
+                    casualty_injured= f"Casualties: {temp_1.group()}"
 
-        severity_label=severity_model(title=content)
-        set_=(title.lower(), content.lower(), type_.lower(), location.lower(), casualty_injured, severity_label[0].lower(), cron_job_date_)
-        cursor_.execute("INSERT INTO Landslide values(?, ?, ?, ?, ?, ?, ?)", set_)
-        print(f'''
-            {index+1}.  Title: {title.lower()}
-                Paragraph: {content.lower()}
-                Event Type: {type_.lower()}
-                Location: {location.lower()}
-                Casualty/Injured: {casualty_injured}
-                Severity: {severity_label[0].lower()}
-                Cron_Job Date: {cron_job_date_}
-                            \n
-        ''')
+            if(flag==0):
+                ps_= PorterStemmer()
+                stemmed_output_=' '.join([ps_.stem(t) for t in content])
+                temp=re.compile(r'die|death|dead|deadli|kill|buri').search(stemmed_output_)
+                if not temp:
+                    temp_2=re.compile(r'injuri|injur|hit|trap|fear|threat|threaten|hurt').search(stemmed_output_)
+                    if not temp_2:
+                        casualty_injured="Casualty or injury not found+"
+                        flag=1
 
-        print("\n\n")
+                    else:
+                        temp_3=re.compile(r' \d\d\d | \d\d | \d ').search(stemmed_output_)
+                        if not temp_3:
+                            casualty_injured= "Injury found - Couldn't detect count of injured.+"
+                            flag=1
+                        else:
+                            casualty_injured= f"Injuries: {temp_3.group()}+"
+                            flag=1
+                else:
+                    temp_1=re.compile(r' \d\d\d | \d\d | \d ').search(stemmed_output_)
+                    if not temp_1:
+                        if has_number_words(content) == False:
+                            casualty_injured= "Casualty Found - Couldn't detect count of casualities.+"
+                            flag=1
+
+                        else:
+                            _, casualty_value= has_number_words(content)
+                            casualty_injured= f"Casualties: {casualty_value}+"
+                            flag=1
+                    else:
+                        casualty_injured= f"Casualties: {temp_1.group()}+"
+                        flag=1
+
+            severity_label=severity_model(title=content)
+            set_=(title.lower(), content.lower(), type_.lower(), location.lower(), casualty_injured, severity_label[0].lower(), cron_job_date_)
+            cursor_.execute("INSERT INTO Landslide values(?, ?, ?, ?, ?, ?, ?)", set_)
+            print(f'''
+                {index+1}.  Title: {title.lower()}
+                    Paragraph: {content.lower()}
+                    Event Type: {type_.lower()}
+                    Location: {location.lower()}
+                    Casualty/Injured: {casualty_injured}
+                    Severity: {severity_label[0].lower()}
+                    Cron_Job Date: {cron_job_date_}
+                                \n
+            ''')
+
+            print("\n\n")
 
 ###############################################################################################
 
