@@ -30,6 +30,7 @@ import sqlite3
 from word2number import w2n
 from PIL import Image
 from pygooglenews import GoogleNews
+import pickle
 ###########################################################
 
 # Initialization script
@@ -113,47 +114,17 @@ def has_number_words(sentence):
     return False
 ########################## ***************************************** ########################
 
+# ################################################################################################
+# def prediction(X_test, model_object):
+#     y_pred= model_object.predict(xv_test)
+#     # print("Predicted values: ")
+#     return y_pre
+# ################################################################################################
 
 
-############## ******************TRAINING THE SEVERITY MODEL*********************** #########################
-def severity_model(title):
-    data= pd.read_excel('C:/Users/HP/Desktop/Python_AI/Timeline_Generator/genres/generic/severity_label/Labelled.xlsx')
+#################################################################################################################################
 
-    ################################ Data cleansing ##################################
-    for j in range(0, 596):
-        data['Label'][j]=data['Label'][j].lower()
-        data['Label'][j]=re.sub(" ", "", data['Label'][j])
-        data['News-Item'][j]=re.sub('https?://\S+|www\.\S+', '', data['News-Item'][j])
-        data['News-Item'][j]=re.sub('\[.*?\]', '', data['News-Item'][j])
-        data['News-Item'][j]=re.sub('<.*?>+', '', data['News-Item'][j])
-        data['News-Item'][j]=re.sub('\w*\d\w*', '', data['News-Item'][j])  
-    ############################### XXXXXXXXXXXXXXXX ################################
-    X_train= data['News-Item']  # Feature Column
-    y_train= data['Label']  # Target Colum
-     ###################### Vectorization && Transformation ####################################
-    vectorization= TfidfVectorizer()
-    xv_train= vectorization.fit_transform(X_train)
-    ##################### XXXXXXXXXXXXXXXXXXXXXXXXXX ################################
-
-    ###################### Training #################################################
-    # model_gini= DecisionTreeClassifier(criterion="gini", random_state=123, max_depth=10, min_samples_leaf=6)
-    model_gini=svm.SVC(kernel='linear')
-    model_gini.fit(xv_train, y_train)
-
-    ############### Fetch Assessment Data & Vectorize ######################
-    X_test= pd.Series(title)
-    xv_test= vectorization.transform(X_test)
-
-    ############## Assessment #####################
-    def prediction(X_test, model_object):
-        y_pred= model_object.predict(xv_test)
-        # print("Predicted values: ")
-        return y_pred
-    ##############################################
-    y_pred_gini=prediction(xv_test, model_gini)
-    severity_label=y_pred_gini
-    return severity_label
-############################ *************SEVERITY ENDS************* #######################################
+##############################################################################################################################
 
 
 
@@ -254,7 +225,15 @@ def fetch_gnews_article(keyword):
                         casualty_injured= f"Casualties: {temp_1.group()}+"
                         flag=1
 
-            severity_label=severity_model(title=content)
+            ####################################################
+            # severity_label=severity_model(title=content)
+            # pickled_model_gini = pickle.load(open('C:/Users/HP/Desktop/Python_AI/Timeline_Generator/genres/generic/severity_label/severity_model.pkl', 'rb'))
+            pickled_model_gini = pickle.load(open('severity_model.pkl', 'rb'))
+            X_test= pd.Series(content)
+            from severity_label.model import vectorized
+            xv_test= vectorized.transform(X_test)
+            severity_label= pickled_model_gini.predict(xv_test)
+            ####################################################
             set_=(title.lower(), content.lower(), type_.lower(), location.lower(), casualty_injured, severity_label[0].lower(), cron_job_date_)
             cursor_.execute("INSERT INTO Landslide values(?, ?, ?, ?, ?, ?, ?)", set_)
             print(f'''
