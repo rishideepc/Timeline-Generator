@@ -31,6 +31,10 @@ from word2number import w2n
 from PIL import Image
 from pygooglenews import GoogleNews
 import pickle
+from sumy.parsers.plaintext import PlaintextParser
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.summarizers.text_rank import TextRankSummarizer 
+
 ###########################################################
 
 # Initialization script
@@ -234,8 +238,18 @@ def fetch_gnews_article(keyword):
             xv_test= vectorized.transform(X_test)
             severity_label= pickled_model_gini.predict(xv_test)
             ####################################################
-            set_=(title.lower(), content.lower(), type_.lower(), location.lower(), casualty_injured, severity_label[0].lower(), cron_job_date_)
-            cursor_.execute("INSERT INTO Landslide values(?, ?, ?, ?, ?, ?, ?)", set_)
+            parser= PlaintextParser.from_string(content, Tokenizer("english"))
+            summarizer = TextRankSummarizer()
+            summary= summarizer(parser.document, 1)
+            text_summary=""
+
+            for sentence in summary:
+                text_summary+=str(sentence)
+
+            # print("TEXT SUMMARY: ", text_summary)
+            ####################################################
+            set_=(title.lower(), content.lower(), type_.lower(), location.lower(), casualty_injured, severity_label[0].lower(), text_summary, cron_job_date_)
+            cursor_.execute("INSERT INTO Landslide values(?, ?, ?, ?, ?, ?, ?, ?)", set_)
             print(f'''
                 {index+1}.  Title: {title.lower()}
                     Paragraph: {content.lower()}
@@ -243,6 +257,7 @@ def fetch_gnews_article(keyword):
                     Location: {location.lower()}
                     Casualty/Injured: {casualty_injured}
                     Severity: {severity_label[0].lower()}
+                    Text Summary: {text_summary}
                     Cron_Job Date: {cron_job_date_}
                                 \n
             ''')
