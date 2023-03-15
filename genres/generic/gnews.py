@@ -161,14 +161,14 @@ def fetch_gnews_article(keyword):
                     location=word
 
                 if location=="none":
-                    tokenized_text= word_tokenize(content)
-                    classified_text= st.tag(tokenized_text)
-                    for word, tag in classified_text:
+                    tokenized_text_= word_tokenize(content)
+                    classified_text_= st.tag(tokenized_text)
+                    for word, tag in classified_text_:
                         if tag=="LOCATION":
                             location=word
             flag=1
             ps= PorterStemmer()
-            stemmed_output=' '.join([ps.stem(t) for t in title])
+            stemmed_output=' '.join([ps.stem(t) for t in tokenized_text])
             temp=re.compile(r'die|death|dead|deadli|kill|buri').search(stemmed_output)
             if not temp:
                 temp_2=re.compile(r'injuri|injur|hit|trap|fear|threat|threaten|hurt').search(stemmed_output)
@@ -198,7 +198,7 @@ def fetch_gnews_article(keyword):
 
             if(flag==0):
                 ps_= PorterStemmer()
-                stemmed_output_=' '.join([ps_.stem(t) for t in content])
+                stemmed_output_=' '.join([ps_.stem(t) for t in tokenized_text_])
                 temp=re.compile(r'die|death|dead|deadli|kill|buri').search(stemmed_output_)
                 if not temp:
                     temp_2=re.compile(r'injuri|injur|hit|trap|fear|threat|threaten|hurt').search(stemmed_output_)
