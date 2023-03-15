@@ -24,7 +24,7 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer, PorterStemmer
 import nltk
 import matplotlib.pyplot as plt
-import seaborn as sns
+# import seaborn as sns
 import re
 import sqlite3
 from word2number import w2n
