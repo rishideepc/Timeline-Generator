@@ -33,7 +33,7 @@ from pygooglenews import GoogleNews
 import pickle
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
-from sumy.summarizers.text_rank import TextRankSummarizer 
+from sumy.summarizers.lsa import LsaSummarizer
 
 ###########################################################
 
@@ -239,7 +239,7 @@ def fetch_gnews_article(keyword):
             severity_label= pickled_model_gini.predict(xv_test)
             ####################################################
             parser= PlaintextParser.from_string(content, Tokenizer("english"))
-            summarizer = TextRankSummarizer()
+            summarizer = LsaSummarizer()
             summary= summarizer(parser.document, 1)
             text_summary=""
 
