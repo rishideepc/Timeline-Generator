@@ -28,17 +28,18 @@ def my_form_post():
     text_date_time = request.form['timeframe']
     text_location = request.form['location']
 
-    date_time_ = []
+    # date_time_ = []
     title = []
     desc = []
     casualty_injured= []
     severity= []
+    summary= []
 
 
 
     cursor_.execute(f'''
 
-        SELECT * FROM Disaster WHERE (Type LIKE '{text_keyword}' AND Location LIKE '{text_location}' AND DateTime LIKE '{text_date_time}') OR (Type LIKE '{text_keyword}' AND Location LIKE '{text_location}') OR (Type LIKE '{text_keyword}')
+        SELECT * FROM Landslide WHERE (Type LIKE '{text_keyword}' AND Location LIKE '{text_location}') OR (Type LIKE '{text_keyword}')
 
     ''')
 
@@ -57,13 +58,14 @@ def my_form_post():
             continue
         visited[group] = no_items
         title.append(item[2])
-        date_time_.append(item[1])
+        # date_time_.append(item[1])
         desc.append(item[0])
         casualty_injured.append(item[4])
         severity.append(item[5])
+        summary.append(item[6])
         no_items += 1
 
     connect_.commit()
     connect_.close()
 
-    return render_template('timeline.html', title_=title, date_=date_time_, desc_=desc, num=no_items, casualty_injured_=casualty_injured, severity_=severity)
+    return render_template('timeline.html', title_=title, desc_=desc, num=no_items, casualty_injured_=casualty_injured, severity_=severity, summary_=summary)

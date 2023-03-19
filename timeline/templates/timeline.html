@@ -45,11 +45,11 @@
                 {%for i in range(0, num): %}
                 <li>
                     <div class="timeline-content">
-                        {%if date_[i]%}
-                        <h2 class="date">{{date_[i]}}</h2>
-                        {% endif %}
                         {%if title_[i]%}
                         <h2>{{title_[i]}}</h2>
+                        {% endif %}
+                        {%if summary_[i]%}
+                        <h2>{{summary_[i]}}</h2>
                         {% endif %}
                         {% if desc_[i] %}
                         <p>
