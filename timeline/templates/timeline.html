@@ -45,27 +45,37 @@
                 {%for i in range(0, num): %}
                 <li>
                     <div class="timeline-content">
+                      {% if "type" in features_ %}
                         {%if title_[i]%}
                         <h2>{{title_[i]}}</h2>
                         {% endif %}
+                      {% endif %}
+                      {% if "summary" in features_ %}
                         {%if summary_[i]%}
                         <h2>{{summary_[i]}}</h2>
                         {% endif %}
+                      {% endif %}
+                      {% if "title" in features_ %}
                         {% if desc_[i] %}
                         <p>
                             {{desc_[i]}}
                         </p>
                         {% endif %}
+                      {% endif %}
+                      {% if "casualty/injured" in features_ %}
                         {% if casualty_injured_[i] %}
                         <h3>
                             {{casualty_injured_[i]}}
                         </h3>
                         {% endif %}
+                      {% endif %}
+                      {% if "severity" in features_ %}
                         {% if severity_[i] %}
                         <h3>
                             Predicted Severity: {{severity_[i]}}
                         </h3>
                         {% endif %}
+                      {% endif %}
                     </div>
                 </li> 
                 {% endfor %}
