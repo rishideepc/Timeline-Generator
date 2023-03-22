@@ -1,9 +1,9 @@
 from pydoc import describe
 from flask import Blueprint, render_template
 from flask import Flask, request, render_template, redirect
-from genres.generic.gnews import *
-from genres.generic.ndtv import *
-from genres.sports.cricketaddic import fetch_info_cricaddic
+# from genres.generic.gnews import *
+# from genres.generic.ndtv import *
+# from genres.sports.cricketaddic import fetch_info_cricaddic
 import urllib, json
 import sqlite3
 import webbrowser
@@ -27,6 +27,7 @@ def my_form_post():
     text_keyword = request.form['keyword']
     text_date_time = request.form['timeframe']
     text_location = request.form['location']
+    text_features = request.form['features']
 
     # date_time_ = []
     title = []
@@ -35,7 +36,8 @@ def my_form_post():
     severity= []
     summary= []
 
-
+    features_timeline = []
+    features_timeline = text_features.split(" ")
 
     cursor_.execute(f'''
 
@@ -68,4 +70,4 @@ def my_form_post():
     connect_.commit()
     connect_.close()
 
-    return render_template('timeline.html', title_=title, desc_=desc, num=no_items, casualty_injured_=casualty_injured, severity_=severity, summary_=summary)
+    return render_template('timeline.html', title_=title, desc_=desc, num=no_items, casualty_injured_=casualty_injured, severity_=severity, summary_=summary, features_=features_timeline)
