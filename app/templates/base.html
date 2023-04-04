@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <!-- <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script> -->
+    <py-env>
+      flask
+    </py-env>
+    <title>Python Timeline Generator</title>
+</head>
+<body>
+  <nav class="flex items-center justify-between flex-wrap bg-blue-400 dark:bg-blue-800 p-6">
+    <div class="flex items-center flex-shrink-0 text-gray-200 mr-6">
+      <!-- <i class='fab fa-python' style='font-size:36px'></i> -->
+      <span class="font-semibold text-xl tracking-tight">PyTimeline-Generator</span>
+    </div>
+    <div class="block lg:hidden">
+      <button class="flex items-center px-3 py-2 border rounded text-blue-400 border-blue-400 hover:text-white hover:border-white">
+        <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+      </button>
+    </div>
+    <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+      <div class="text-sm lg:flex-grow">
+        <a href="/" class="block mt-4 lg:inline-block lg:mt-0 text-blue-200 hover:text-white mr-4">
+          Home
+        </a>
+        <a href="/about" class="block mt-4 lg:inline-block lg:mt-0 text-blue-200 hover:text-white mr-4">
+          About Us
+        </a>
+        <a href="mailto: rishi1a2@gmail.com" class="block mt-4 lg:inline-block lg:mt-0 text-blue-200 hover:text-white">
+          Contact Us
+        </a>
+      </div>
+      <div>
+        <a href="C:\Users\HP\Desktop\Python_AI\Timeline_Generator\genres\generic\severity_label" download="Labelled.xlsx" class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-blue-400 hover:bg-white mt-4 lg:mt-0">Download Dataset</a>
+      </div>
+    </div>
+  </nav>
+  <div class="bg-gray-100 dark:bg-slate-800 shadow px-8 pt-6 pb-8 flex flex-col">
+      <!-- *************************************************************************************************** -->
+        <div class="mb-4">
+            <form method="POST">
+                <label class="block text-grey-darker dark:text-white text-sm font-bold mb-2" for="keyword">
+                    Keyword
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker" id="keyword" name="keyword" type="text" placeholder="E.g. earthquake">
+                <p><br></p>
+                <label class="block text-grey-darker dark:text-white text-sm font-bold mb-2" for="timeframe">
+                    Time Window
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker" id="timeframe" name="timeframe" type="text"  placeholder="E.g. 2019">
+                <p><br></p>
+                <label class="block text-grey-darker dark:text-white text-sm font-bold mb-2" for="location">
+                    Location
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker" id="location" name="location" type="text" placeholder="E.g. London">
+                <p><br></p>
+                <label class="block text-grey-darker dark:text-white text-sm font-bold mb-2" for="features">
+                  Features
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker" id="features" name="features" type="text" placeholder="E.g. type, severity, title, summary, casualty, injured">
+                <p><br></p>
+                <div class="mb-2">
+                <button class="bg-transparent hover:bg-blue-400 dark:hover:bg-blue-700 text-blue-400 dark:text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-400 dark:border-blue-700 hover:border-transparent rounded" type="button">
+                  <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"><input type="submit" ></a>
+                </button>
+                </div>
+                <br>
+                <div class="mb-2">
+                  <button class="bg-transparent hover:bg-blue-400 dark:hover:bg-blue-700 text-blue-400 dark:text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-400 dark:border-blue-700 hover:border-transparent rounded" type="button">
+                    <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="/timeline">Conference Article</a>
+                  </button>
+                </div>
+            </form>
+        </div>
+      <!-- **************************************************************************************************** -->
+          <!-- <div class="mb-4">
+            <form method="POST">
+              <label class="block text-grey-darker text-sm font-bold mb-2" for="timeframe">
+                Time Window
+              </label>
+              <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker" id="timeframe" name="timeframe" type="text"  placeholder="Enter time window">
+            </form>
+          </div> -->
+      <!-- ******************************************************************************************************** -->
+            <!-- <div class="mb-6">
+              <form method="POST">
+                <label class="block text-grey-darker text-sm font-bold mb-2" for="location">
+                  Location
+                </label>
+                <input class="shadow appearance-none border border-red rounded w-full py-2 px-3 text-grey-darker mb-3" id="location" name ="location" type="text" placeholder="Enter location">
+              </form>
+            </div> -->
+      <!-- ********************************************************************************************************** -->
+            <!-- <div class="flex items-center justify-between">
+              <button class="bg-transparent hover:bg-blue-400 text-blue-400 font-semibold hover:text-white py-1 px-3 border border-blue-400 hover:border-transparent rounded" type="button">
+                <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"><input type="submit" ></a>
+              </button>
+              <a class="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="#">
+              </a>
+            </div> -->
+      <!-- ********************************************************************************************************** -->
+    </div>
+    <!-- ********************************************************************************************************** -->
+    
+    <footer class="text-center lg:text-left bg-blue-400 dark:bg-blue-800">
+      <div class="text-white text-center p-4">
+        © 2023 Copyright:
+        <a class="text-white" href="https://tailwind-elements.com/">Dept. of Computer Science, Jadavpur University</a>
+      </div>
+    </footer>
+</body>
+</html>

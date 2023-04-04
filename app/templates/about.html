@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <!-- <script defer src="https://pyscript.net/alpha/pyscript.js"></script> -->
+        <!-- <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script> -->
+        <title>Python Timeline Generator</title>
+    </head>
+    <body>
+        <nav class="flex items-center justify-between flex-wrap bg-blue-400 dark:bg-blue-800 p-6">
+            <div class="flex items-center flex-shrink-0 text-white dark:slate-800 mr-6">
+            <!-- <svg class="fill-current h-8 w-8 mr-2" width="54" height="54" viewBox="0 0 54 54" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 22.1c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 38.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z"/></svg> -->
+            <!-- <i class='fab fa-python' style='font-size:36px'></i> -->
+                <span class="font-semibold text-xl tracking-tight">PyTimeline-Generator</span>
+            </div>
+            <div class="block lg:hidden">
+            <button class="flex items-center px-3 py-2 border rounded text-blue-400 border-blue-400 hover:text-white hover:border-white">
+                <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>Menu</title><path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z"/></svg>
+            </button>
+            </div>
+            <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+                <div class="text-sm lg:flex-grow">
+                    <a href="/" class="block mt-4 lg:inline-block lg:mt-0 text-blue-200 hover:text-white mr-4">
+                    Home
+                    </a>
+                    <a href="/about" class="block mt-4 lg:inline-block lg:mt-0 text-blue-200 hover:text-white mr-4">
+                    About Us
+                    </a>
+                    <a href="mailto: rishi1a2@gmail.com" class="block mt-4 lg:inline-block lg:mt-0 text-blue-200 hover:text-white">
+                    Contact Us
+                    </a>
+                </div>
+            <div>
+                <a href="C:\Users\HP\Desktop\Python_AI\Timeline_Generator\genres\generic\severity_label" download="Labelled.xlsx" class="inline-block text-sm px-4 py-2 leading-none border rounded text-white border-white hover:border-transparent hover:text-blue-400 hover:bg-white mt-4 lg:mt-0">Download Dataset</a>
+            </div>
+        </nav>
+        <div class="bg-gray-200 dark:bg-slate-800">
+            <section class="flex p-10 justify-center"> 
+                <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"">
+                    <div class="flex justify-end px-4 pt-4">
+                        <button id="dropdownButton" data-dropdown-toggle="dropdown" class="inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5" type="button">
+                            <span class="sr-only">Open dropdown</span>
+                            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path></svg>
+                        </button>
+                        <!-- Dropdown menu -->
+                        <div id="dropdown" class="z-10 hidden text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                            <ul class="py-2" aria-labelledby="dropdownButton">
+                            <li>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Edit</a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Export Data</a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
+                            </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center pb-10">
+                        <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="https://media.licdn.com/dms/image/C5603AQHhbsckaIqLIg/profile-displayphoto-shrink_100_100/0/1517583194741?e=1684972800&v=beta&t=0ETg0gzvviirfvn_zNU-r7Syv8_BjxRe5QDipHkiFZI" alt="Sarbani_Image"/>
+                        <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Dr. Sarbani Roy</h5>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Professor, Jadavpur University</span>
+                        <div class="flex mt-4 space-x-3 md:mt-6">
+                            <a href="#" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-400 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-400 dark:bg-blue-600 dark:hover:bg-blue-400 dark:focus:ring-blue-800">GitHub</a>
+                            <a href="http://scholar.google.co.in/citations?user=vembv2sAAAAJ&hl=en" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700">Google Scholar</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="flex p-10 justify-center"> 
+                <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+                    <div class="flex justify-end px-4 pt-4">
+                        <button id="dropdownButton" data-dropdown-toggle="dropdown" class="inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5" type="button">
+                            <span class="sr-only">Open dropdown</span>
+                            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path></svg>
+                        </button>
+                        <!-- Dropdown menu -->
+                        <div id="dropdown" class="z-10 hidden text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                            <ul class="py-2" aria-labelledby="dropdownButton">
+                            <li>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Edit</a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Export Data</a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
+                            </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center pb-10">
+                        <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="https://media.licdn.com/dms/image/D5603AQGzDVEshQWbwA/profile-displayphoto-shrink_400_400/0/1678166850831?e=1684972800&v=beta&t=6Rn6wWy5WBV9ppAzKRpykgcRePmOtf8DIPBc5qJRKXY" alt="Subhayan_Image"/>
+                        <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Subhayan Bhattacharya</h5>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Doctoral Student, System Engineer @ TCS</span>
+                        <div class="flex mt-4 space-x-3 md:mt-6">
+                            <a href="https://github.com/SBMama" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-400 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-400 dark:bg-blue-600 dark:hover:bg-blue-400 dark:focus:ring-blue-800">GitHub</a>
+                            <a href="https://scholar.google.co.in/citations?user=i77jtz0AAAAJ&hl=en" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700">Google Scholar</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="flex p-10 justify-center"> 
+                <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"">
+                    <div class="flex justify-end px-4 pt-4">
+                        <button id="dropdownButton" data-dropdown-toggle="dropdown" class="inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-1.5" type="button">
+                            <span class="sr-only">Open dropdown</span>
+                            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path></svg>
+                        </button>
+                        <!-- Dropdown menu -->
+                        <div id="dropdown" class="z-10 hidden text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+                            <ul class="py-2" aria-labelledby="dropdownButton">
+                            <li>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Edit</a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Export Data</a>
+                            </li>
+                            <li>
+                                <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Delete</a>
+                            </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center pb-10">
+                        <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="https://media.licdn.com/dms/image/C4D03AQH1a8O6isBWHw/profile-displayphoto-shrink_400_400/0/1663126517901?e=1681344000&v=beta&t=i6LwS2BVMYyycsp87_m6ptJD1xz7jEHet2D_biaLMug" alt="Rishideep_Image"/>
+                        <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Rishideep Chatterjee</h5>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">Undergraduate, ML Intern @ Jadavpur University</span>
+                        <div class="flex mt-4 space-x-3 md:mt-6">
+                            <a href="https://github.com/rishideepc" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-400 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-400 dark:bg-blue-600 dark:hover:bg-blue-400 dark:focus:ring-blue-800">GitHub</a>
+                            <a href="#" class="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-700 dark:focus:ring-gray-700">Google Scholar</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <footer class="text-center lg:text-left bg-blue-400 dark:bg-blue-800">
+            <div class="text-white text-center p-4">
+              © 2023 Copyright:
+              <a class="text-white" href="https://tailwind-elements.com/">Dept. of Computer Science, Jadavpur University</a>
+            </div>
+          </footer>
+    </body>
+</html> 
