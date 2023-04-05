@@ -1,8 +1,7 @@
-from flask import Blueprint
 from flask import request, render_template
+from app import app
 from app.models.dao import DAOOperations
 from app.models.parser import DataParser
-from app import app
 
 
 @app.route('/about')
