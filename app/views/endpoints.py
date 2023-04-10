@@ -20,4 +20,6 @@ def my_form_post():
         items = dao.query_all(text_keyword, text_location)
         title, desc, casualty_injured, severity, summary, no_items = parser.parse_db_data(items)
         features_timeline = text_features.split(" ")
-        return render_template('timeline.html', title_=title, desc_=desc, num=no_items, casualty_injured_=casualty_injured, severity_=severity, summary_=summary, features_=features_timeline)
+        return render_template('timeline.html', title_=title, desc_=desc, num=no_items,
+                               casualty_injured_=casualty_injured, severity_=severity, summary_=summary,
+                               features_=features_timeline)

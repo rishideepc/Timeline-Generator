@@ -12,9 +12,9 @@ import pickle
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.lsa import LsaSummarizer
-
 from app.models.dao import DAOOperations
 from app.models.severity import vectorized
+from app.models.bert_qa import BertQA
 
 
 class CronJob:
@@ -26,6 +26,7 @@ class CronJob:
         self.keywords_disaster = ['landslide']
         self.gn = GoogleNews()
         self.dao = DAOOperations()
+        self.bert = BertQA()
 
     def __del__(self):
         del self.dao
@@ -152,6 +153,27 @@ class CronJob:
                     casualty_injured = f"Casualties: {temp_1.group()}+"
         return casualty_injured
 
+    def combine_results(self, bert_results, location, casualty_injured):
+        date_ = bert_results[2]
+        loc = bert_results[3]
+        if loc != "Negative":
+            location.append(loc)
+        location = list(set(location))
+        if casualty_injured == "Casualty or injury not found":
+            if bert_results[4] != "Negative":
+                casualty_injured = f"Casualty: {bert_results[4]}"
+            if bert_results[5] != "Negative":
+                if "not found" in casualty_injured:
+                    casualty_injured = f"Injuries : {bert_results[5]}"
+                else:
+                    casualty_injured += f"Injuries : {bert_results[5]}"
+            if bert_results[6] != "Negative":
+                if "not found" in casualty_injured:
+                    casualty_injured = f"Affected : {bert_results[6]}"
+                else:
+                    casualty_injured += f"Affected : {bert_results[6]}"
+        return date_, location, casualty_injured
+
     def fetch_gnews_article(self):
         keyword = self.keywords_disaster[0]
         today = date.today()
@@ -160,13 +182,19 @@ class CronJob:
         for index, article in enumerate(articles['entries']):
             if index >= 100:
                 break
-            title, link, pubdate, content = self.get_details(article)
-            type_ = keyword
-            location = self.get_location(title, content)
-            severity_label = self.get_severity(content)
-            text_summary = self.get_text_summary(content)
-            casualty_injured = self.get_casualty(title, content)
-            self.dao.insert(title, content, type_, location, casualty_injured, severity_label, text_summary, cron_job_date_)
+            try:
+                title, link, pubdate, content = self.get_details(article)
+                type_ = keyword
+                bert_details = self.bert.wrapper(content)
+                location = self.get_location(title, content)
+                severity_label = self.get_severity(content)
+                text_summary = self.get_text_summary(content)
+                casualty_injured = self.get_casualty(title, content)
+                date_, location, casualty_injured = self.combine_results(bert_details, location, casualty_injured)
+                self.dao.insert(title, content, type_, location, casualty_injured, severity_label, text_summary,
+                                cron_job_date_, date_)
+            except Exception:
+                pass
         self.dao.connect_.close()
 
 
