@@ -1,3 +1,6 @@
+import sys
+sys.path.append('/home/rishideepch/Documents/Work_Internship/Timeline-Generator/')
+
 from flask import Flask
 import os
 

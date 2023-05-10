@@ -1,3 +1,5 @@
+import sys
+sys.path.append('/home/rishideepch/Documents/Work_Internship/Timeline-Generator/')
 import requests
 from bs4 import BeautifulSoup
 from datetime import *

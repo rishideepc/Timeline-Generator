@@ -10,7 +10,38 @@
     <py-env>
       flask
     </py-env>
-    <title>Python Timeline Generator</title>
+    <title style="font-size: larger;">Python Timeline Generator</title>
+    <style>
+      #type, #severity, #title, #summary, #casualty_injured {
+        width: 20px;
+        height: 20px;
+        background-color: #eee;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        cursor: pointer;
+        vertical-align: middle;
+        position: relative;
+      }
+
+      #type:checked::after, #severity:checked::after, #title:checked::after, #summary:checked::after, #casualty_injured:checked::after {
+        content: "";
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 10px;
+        height: 10px;
+        background-color: #555;
+        border-radius: 1px;
+      }
+
+      #type:focus, #severity:focus, #title:focus, #summary:focus, #casualty_injured:focus {
+        outline: none; /* remove default focus outline */
+        box-shadow: 0 0 3px #999; /* add custom focus style */;
+      }
+
+    </style>
 </head>
 <body>
   <nav class="flex items-center justify-between flex-wrap bg-blue-400 dark:bg-blue-800 p-6">
@@ -43,26 +74,49 @@
   <div class="bg-gray-100 dark:bg-slate-800 shadow px-8 pt-6 pb-8 flex flex-col">
       <!-- *************************************************************************************************** -->
         <div class="mb-4">
-            <form method="POST">
-                <label class="block text-grey-darker dark:text-white text-sm font-bold mb-2" for="keyword">
+            <form id="parameters" method="POST">
+                <label class="block text-grey-darker dark:text-white text-sm font-bold mb-2" for="keyword" style="font-size: large;">
                     Keyword
                 </label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker" id="keyword" name="keyword" type="text" placeholder="E.g. earthquake">
                 <p><br></p>
-                <label class="block text-grey-darker dark:text-white text-sm font-bold mb-2" for="timeframe">
+                <label class="block text-grey-darker dark:text-white text-sm font-bold mb-2" for="timeframe" style="font-size: large;">
                     Time Window
                 </label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker" id="timeframe" name="timeframe" type="text"  placeholder="E.g. 2019">
                 <p><br></p>
-                <label class="block text-grey-darker dark:text-white text-sm font-bold mb-2" for="location">
+                <label class="block text-grey-darker dark:text-white text-sm font-bold mb-2" for="location" style="font-size: large;">
                     Location
                 </label>
                 <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker" id="location" name="location" type="text" placeholder="E.g. London">
                 <p><br></p>
-                <label class="block text-grey-darker dark:text-white text-sm font-bold mb-2" for="features">
-                  Features
+                <label class="block text-grey-darker dark:text-white text-sm font-bold mb-2" for="features" style="font-size: large;">
+                    Features
                 </label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker" id="features" name="features" type="text" placeholder="E.g. type, severity, title, summary, casualty, injured">
+                <div style="padding-left: 20px;">
+                  <div class="block text-grey-darker dark:text-white text-sm font-italic mb-2">
+                    <input type="checkbox" id="type" name="features[]" value="type">
+                    <label for="type">Type</label>
+                  </div>
+                  <div class="block text-grey-darker dark:text-white text-sm font-italic mb-2">
+                    <input type="checkbox" id="severity" name="features[]" value="severity">
+                    <label for="severity">Severity</label>
+                  </div>
+                  <div class="block text-grey-darker dark:text-white text-sm font-italic mb-2">
+                    <input type="checkbox" id="title" name="features[]" value="title">
+                    <label for="title">Title</label>
+                  </div>
+                  <div class="block text-grey-darker dark:text-white text-sm font-italic mb-2">
+                    <input type="checkbox" id="summary" name="features[]" value="summary">
+                    <label for="summary">Summary</label>
+                  </div>
+                  <div class="block text-grey-darker dark:text-white text-sm font-italic mb-2">
+                    <input type="checkbox" id="casualty_injured" name="features[]" value="casualty_injured">
+                    <label for="casualty_injured">Casualty/Injured</label>
+                  </div>
+                </div>
+            
+                <!-- <input class="shadow appearance-none border rounded w-full py-2 px-3 text-grey-darker" id="features" name="features" type="text" placeholder="E.g. type, severity, title, summary, casualty, injured"> -->
                 <p><br></p>
                 <div class="mb-2">
                 <button class="bg-transparent hover:bg-blue-400 dark:hover:bg-blue-700 text-blue-400 dark:text-blue-700 font-semibold hover:text-white py-1 px-3 border border-blue-400 dark:border-blue-700 hover:border-transparent rounded" type="button">
