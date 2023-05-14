@@ -76,6 +76,11 @@
                         </h3>
                         {% endif %}
                       {% endif %}
+                      {% if location_[i] %}
+                      <h4>
+                          Location: {{location_[i]}}
+                      </h4>
+                      {% endif %}
                     </div>
                 </li> 
                 {% endfor %}

@@ -1,3 +1,5 @@
+import sys
+sys.path.append('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator')
 import pandas as pd
 from sklearn import svm
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -5,7 +7,7 @@ import re
 import pickle
 
 def severity_model():
-    data = pd.read_excel('..\\resources\\Labelled.xlsx')
+    data = pd.read_excel('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\app\\resources\\Labelled.xlsx')
 
     for j in range(0, 596):
         data['Label'][j]=data['Label'][j].lower()
@@ -20,7 +22,7 @@ def severity_model():
     xv_train= vectorization.fit_transform(X_train)
     model_gini=svm.SVC(kernel='linear')
     model_gini.fit(xv_train, y_train)
-    pickle.dump(model_gini, open('..\\resources\\severity_model.pkl', 'wb'))
+    pickle.dump(model_gini, open('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\app\\resources\\severity_model.pkl', 'wb'))
     return vectorization
 
 vectorized = severity_model()

@@ -1,5 +1,5 @@
 import sys
-sys.path.append('/home/rishideepch/Documents/Work_Internship/Timeline-Generator/')
+sys.path.append('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator')
 
 from flask import Flask
 import os

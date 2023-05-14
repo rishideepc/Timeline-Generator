@@ -1,3 +1,5 @@
+import sys
+sys.path.append('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator')
 import torch
 from transformers import BertForQuestionAnswering
 from transformers import BertTokenizer
@@ -122,4 +124,4 @@ if __name__ == '__main__':
 
         “I am now thinking of what to do next,” he said. “I don’t even know.”
     """
-    print(obj.wrapper(t))
+    print(obj.wrapper(test_t))

@@ -1,5 +1,5 @@
 import sys
-sys.path.append('/home/rishideepch/Documents/Work_Internship/Timeline-Generator/')
+sys.path.append('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator')
 import requests
 from bs4 import BeautifulSoup
 from datetime import *
@@ -22,16 +22,16 @@ from app.models.bert_qa import BertQA
 class CronJob:
     def __init__(self):
         self.st = StanfordNERTagger(
-            '..\\resources\\stanford-ner-2020-11-17\\classifiers\\english.all.3class.distsim.crf.ser.gz',
-            '..\\resources\\stanford-ner-2020-11-17\\stanford-ner.jar',
+            'C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\app\\resources\\stanford-ner-2020-11-17\\classifiers\\english.all.3class.distsim.crf.ser.gz',
+            'C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\app\\resources\\stanford-ner-2020-11-17\\stanford-ner.jar',
             encoding='utf-8')
         self.keywords_disaster = ['landslide']
         self.gn = GoogleNews()
         self.dao = DAOOperations()
         self.bert = BertQA()
 
-    def __del__(self):
-        del self.dao
+    # def __del__(self):
+    #     del self.dao
 
     def has_number_words(self, sentence):
         words = sentence.split()
