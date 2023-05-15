@@ -1,5 +1,4 @@
 import sys
-sys.path.append('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator')
 import requests
 from bs4 import BeautifulSoup
 from datetime import *
@@ -22,13 +21,15 @@ from app.models.bert_qa import BertQA
 class CronJob:
     def __init__(self):
         self.st = StanfordNERTagger(
-            'C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\app\\resources\\stanford-ner-2020-11-17\\classifiers\\english.all.3class.distsim.crf.ser.gz',
-            'C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\app\\resources\\stanford-ner-2020-11-17\\stanford-ner.jar',
+            '..\\resources\\stanford-ner-2020-11-17\\classifiers\\english.all.3class.distsim.crf.ser.gz',
+            '..\\resources\\stanford-ner-2020-11-17\\stanford-ner.jar',
             encoding='utf-8')
         self.keywords_disaster = ['landslide']
         self.gn = GoogleNews()
         self.dao = DAOOperations()
         self.bert = BertQA()
+        self.endpoint = "http://api.positionstack.com/v1/forward"
+        self.access_key = "2e9fd33a8efefbcd7fa0181c9cde822c"
 
     # def __del__(self):
     #     del self.dao
@@ -61,17 +62,17 @@ class CronJob:
     def get_location(self, title, content):
         tokenized_text = word_tokenize(title)
         classified_text = self.st.tag(tokenized_text)
-        location = []
+        location = ""
         for word, tag in classified_text:
             if tag == "LOCATION":
-                location.append(word)
+                location = word
 
-            if not location:
-                tokenized_text_ = word_tokenize(content)
-                classified_text_ = self.st.tag(tokenized_text_)
-                for word, tag in classified_text_:
-                    if tag == "LOCATION":
-                        location.append(word)
+        if not location:
+            tokenized_text_ = word_tokenize(content)
+            classified_text_ = self.st.tag(tokenized_text_)
+            for word, tag in classified_text_:
+                if tag == "LOCATION":
+                    location = word
         return location
 
     def get_severity(self, content):
@@ -132,35 +133,34 @@ class CronJob:
             if not temp:
                 temp_2 = re.compile(r'injuri|injur|hit|trap|fear|threat|threaten|hurt').search(stemmed_output_)
                 if not temp_2:
-                    casualty_injured = "Casualty or injury not found+"
+                    casualty_injured = "Casualty or injury not found"
                 else:
                     temp_3 = re.compile(r' \d\d\d | \d\d | \d ').search(stemmed_output_)
                     if not temp_3:
                         if not self.has_number_words(content):
-                            casualty_injured = "Injuries Found - Couldn't detect count of casualities.+"
+                            casualty_injured = "Injuries Found - Couldn't detect count of casualities."
                         else:
                             _, casualty_value = self.has_number_words(content)
-                            casualty_injured = f"Injuries: {casualty_value}+"
+                            casualty_injured = f"Injuries: {casualty_value}"
                     else:
-                        casualty_injured = f"Injuries: {temp_3.group()}+"
+                        casualty_injured = f"Injuries: {temp_3.group()}"
             else:
                 temp_1 = re.compile(r' \d\d\d | \d\d | \d ').search(stemmed_output_)
                 if not temp_1:
                     if not self.has_number_words(content):
-                        casualty_injured = "Casualty Found - Couldn't detect count of casualities.+"
+                        casualty_injured = "Casualty Found - Couldn't detect count of casualities."
                     else:
                         _, casualty_value = self.has_number_words(content)
-                        casualty_injured = f"Casualties: {casualty_value}+"
+                        casualty_injured = f"Casualties: {casualty_value}"
                 else:
-                    casualty_injured = f"Casualties: {temp_1.group()}+"
+                    casualty_injured = f"Casualties: {temp_1.group()}"
         return casualty_injured
 
     def combine_results(self, bert_results, location, casualty_injured):
         date_ = bert_results[2]
         loc = bert_results[3]
-        if loc != "Negative":
-            location.append(loc)
-        location = list(set(location))
+        if loc != "Negative" and not location:
+            location = loc
         if casualty_injured == "Casualty or injury not found":
             if bert_results[4] != "Negative":
                 casualty_injured = f"Casualty: {bert_results[4]}"
@@ -174,7 +174,14 @@ class CronJob:
                     casualty_injured = f"Affected : {bert_results[6]}"
                 else:
                     casualty_injured += f"Affected : {bert_results[6]}"
-        return date_, location, casualty_injured
+        params_2 = {
+            'access_key': self.access_key,
+            'query': location,
+            'limit': 1
+        }
+        response = requests.get(self.endpoint, params=params_2).json()
+        latitude, longitude = response['data'][0]['latitude'], response['data'][0]['longitude']
+        return date_, location, casualty_injured, latitude, longitude
 
     def fetch_gnews_article(self):
         keyword = self.keywords_disaster[0]
@@ -192,9 +199,10 @@ class CronJob:
                 severity_label = self.get_severity(content)
                 text_summary = self.get_text_summary(content)
                 casualty_injured = self.get_casualty(title, content)
-                date_, location, casualty_injured = self.combine_results(bert_details, location, casualty_injured)
+                date_, location, casualty_injured, latitude, longitude \
+                    = self.combine_results(bert_details, location, casualty_injured)
                 self.dao.insert(title, content, type_, location, casualty_injured, severity_label, text_summary,
-                                cron_job_date_, date_)
+                                cron_job_date_, date_, latitude, longitude)
             except Exception:
                 pass
         self.dao.connect_.close()

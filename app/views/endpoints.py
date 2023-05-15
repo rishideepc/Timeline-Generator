@@ -5,11 +5,7 @@ from app import app
 from app.models.dao import DAOOperations
 from app.models.parser import DataParser
 import requests
-endpoint= 'http://api.positionstack.com/v1/forward'
-access_key= '2e9fd33a8efefbcd7fa0181c9cde822c'
 
-# import googlemaps
-# gmaps= googlemaps.Client(key='AIzaSyC9sTz9SEjLOYI5zKn45q91a4R6W0VeBzY')
 
 @app.route('/about')
 def my_form_about():

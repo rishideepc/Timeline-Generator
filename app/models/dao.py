@@ -1,14 +1,13 @@
 import sys
-sys.path.append('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator')
 import sqlite3
 
 
 class DAOOperations:
     def __init__(self):
         try:
-            self.connect_ = sqlite3.connect('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\app\\resources\\timeline-data.db')
+            self.connect_ = sqlite3.connect('..\\resources\\timeline-data.db')
         except:
-            self.connect_ = sqlite3.connect('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\app\\resources\\timeline-data.db')
+            self.connect_ = sqlite3.connect('..\\resources\\timeline-data.db')
         self.cursor_ = self.connect_.cursor()
 
     def create_table(self):
@@ -24,7 +23,9 @@ class DAOOperations:
                 Severity_Label text,
                 Summary text,
                 CronJobDate text,
-                PublicationDate text
+                PublicationDate text,
+                Latitude text,
+                Longitude text
             )
             """)
         self.connect_.commit()
@@ -55,10 +56,10 @@ class DAOOperations:
             items = self.cursor_.fetchall()
             return items
 
-    def insert(self, title, content, type_, location, casualty_injured, severity_label, text_summary, cron_job_date_, date_):
+    def insert(self, title, content, type_, location, casualty_injured, severity_label, text_summary, cron_job_date_, date_, lat, long):
         set_ = (title.lower(), content.lower(), type_.lower(), ",".join(location).lower(), casualty_injured,
-                severity_label[0].lower(), text_summary, cron_job_date_, date_)
-        self.cursor_.execute("INSERT INTO Landslide values(?, ?, ?, ?, ?, ?, ?, ?, ?)", set_)
+                severity_label[0].lower(), text_summary, cron_job_date_, date_, lat, long)
+        self.cursor_.execute("INSERT INTO Landslide values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", set_)
         self.connect_.commit()
 
 
@@ -66,6 +67,6 @@ if __name__ == '__main__':
     obj = DAOOperations()
     # obj.clean_table()
     # obj.create_table()
-    res = obj.query_all('landslide', 'India')
+    res = obj.query_all('landslide')
     print(res)
     obj.connect_.close()

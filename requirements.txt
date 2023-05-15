@@ -1,0 +1,12 @@
+pandas
+word2number
+pygooglenews
+sumy
+torch
+transformers
+sklearn
+flask
+requests
+scikit-learn
+openpyxl
+feedparser
