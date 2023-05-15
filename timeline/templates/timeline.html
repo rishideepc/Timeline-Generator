@@ -47,34 +47,39 @@
                     <div class="timeline-content">
                       {% if "type" in features_ %}
                         {%if title_[i]%}
-                        <h2>{{title_[i]}}</h2>
+                        <h3><b>Type:</b> {{title_[i]}}</h3>
                         {% endif %}
                       {% endif %}
                       {% if "summary" in features_ %}
                         {%if summary_[i]%}
-                        <h2>{{summary_[i]}}</h2>
+                        <h3><b>Summary:</b> {{summary_[i]}}</h3>
                         {% endif %}
                       {% endif %}
                       {% if "title" in features_ %}
                         {% if desc_[i] %}
                         <p>
-                            {{desc_[i]}}
+                            <b>Desc:</b> {{desc_[i]}}
                         </p>
                         {% endif %}
                       {% endif %}
                       {% if "casualty/injured" in features_ %}
                         {% if casualty_injured_[i] %}
                         <h3>
-                            {{casualty_injured_[i]}}
+                            <b>Casualty/Injured:</b> {{casualty_injured_[i]}}
                         </h3>
                         {% endif %}
                       {% endif %}
                       {% if "severity" in features_ %}
                         {% if severity_[i] %}
                         <h3>
-                            Predicted Severity: {{severity_[i]}}
+                            <b>Predicted Severity:</b> {{severity_[i]}}
                         </h3>
                         {% endif %}
+                      {% endif %}
+                      {% if date_time_[i] %}
+                      <h3>
+                          <b>DateTime:</b> {{date_time_[i]}}
+                      </h3>
                       {% endif %}
                     </div>
                 </li> 

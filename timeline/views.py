@@ -29,7 +29,7 @@ def my_form_post():
     text_location = request.form['location']
     text_features = request.form['features']
 
-    # date_time_ = []
+    date_time = []
     title = []
     desc = []
     casualty_injured= []
@@ -60,7 +60,7 @@ def my_form_post():
             continue
         visited[group] = no_items
         title.append(item[2])
-        # date_time_.append(item[1])
+        date_time.append(item[7])
         desc.append(item[0])
         casualty_injured.append(item[4])
         severity.append(item[5])
@@ -70,4 +70,4 @@ def my_form_post():
     connect_.commit()
     connect_.close()
 
-    return render_template('timeline.html', title_=title, desc_=desc, num=no_items, casualty_injured_=casualty_injured, severity_=severity, summary_=summary, features_=features_timeline)
+    return render_template('timeline.html', date_time_=date_time, title_=title, desc_=desc, num=no_items, casualty_injured_=casualty_injured, severity_=severity, summary_=summary, features_=features_timeline)
