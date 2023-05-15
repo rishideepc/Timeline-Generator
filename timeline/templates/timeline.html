@@ -14,7 +14,7 @@
     <nav class="flex items-center justify-between flex-wrap bg-blue-400 dark:bg-blue-800 p-6">
         <div class="flex items-center flex-shrink-0 text-white dark:slate-800 mr-6">
           <!-- <i class='fab fa-python' style='font-size:36px'></i> -->
-          <span class="font-semibold text-xl tracking-tight">PyTimeline-Generator</span>
+          <span class="font-semibold text-xl tracking-tight">Automated Event-archive Generator</span>
         </div>
         <div class="block lg:hidden">
           <button class="flex items-center px-3 py-2 border rounded text-blue-400 border-blue-400 hover:text-white hover:border-white">
@@ -44,42 +44,43 @@
             <ul>
                 {%for i in range(0, num): %}
                 <li>
+                    <!-- <div class="timeline-content" style="color: #072641;"> -->
                     <div class="timeline-content">
                       {% if "type" in features_ %}
                         {%if title_[i]%}
-                        <h3><b>Type:</b> {{title_[i]}}</h3>
+                        <h2><b>Type:</b> {{title_[i]}}</h2>
                         {% endif %}
                       {% endif %}
                       {% if "summary" in features_ %}
                         {%if summary_[i]%}
-                        <h3><b>Summary:</b> {{summary_[i]}}</h3>
+                        <h2><b>Summary:</b> {{summary_[i]}}</h2>
                         {% endif %}
                       {% endif %}
                       {% if "title" in features_ %}
                         {% if desc_[i] %}
-                        <p>
-                            <b>Desc:</b> {{desc_[i]}}
-                        </p>
+                        <h2>
+                            <b>Title:</b> {{desc_[i]}}
+                        </h2>
                         {% endif %}
                       {% endif %}
                       {% if "casualty/injured" in features_ %}
                         {% if casualty_injured_[i] %}
-                        <h3>
+                        <h2>
                             <b>Casualty/Injured:</b> {{casualty_injured_[i]}}
-                        </h3>
+                        </h2>
                         {% endif %}
                       {% endif %}
                       {% if "severity" in features_ %}
                         {% if severity_[i] %}
-                        <h3>
+                        <h2>
                             <b>Predicted Severity:</b> {{severity_[i]}}
-                        </h3>
+                        </h2>
                         {% endif %}
                       {% endif %}
                       {% if date_time_[i] %}
-                      <h3>
+                      <h2>
                           <b>DateTime:</b> {{date_time_[i]}}
-                      </h3>
+                      </h2>
                       {% endif %}
                     </div>
                 </li> 
