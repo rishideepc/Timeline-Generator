@@ -49,15 +49,21 @@ def severity_model():
     ###################### Training #################################################
     X_train= data['News-Item']  # Feature Column
     y_train= data['Label']  # Target Colum
+    X_train, X_test, y_train, y_test= train_test_split(data['News-Item'], data['Label'], test_size=0.15, random_state=35)
     ###################### Vectorization && Transformation ####################################
     vectorization= TfidfVectorizer()
     xv_train= vectorization.fit_transform(X_train)
+    xv_test= vectorization.transform(X_test)
 
     # model_gini= DecisionTreeClassifier(criterion="gini", random_state=123, max_depth=10, min_samples_leaf=6)
     model_gini=svm.SVC(kernel='linear')
     model_gini.fit(xv_train, y_train)
-    pickle.dump(model_gini, open('severity_model.pkl', 'wb'))
-    return vectorization
+    y_pred= model_gini.predict(xv_test)
+    print("\nPredicted: ", y_pred)
+    print("\nTest: ", y_test)
+    print("\nAccuracy Score: ", accuracy_score(y_test, y_pred)*100, "%")
+    # pickle.dump(model_gini, open('severity_model.pkl', 'wb'))
+    # return vectorization
     ############################ Training ends ###################################
 
     
@@ -80,4 +86,5 @@ def severity_model():
 ############################ *************SEVERITY ENDS************* #######################################
 
 
-vectorized = severity_model()
+# vectorized = severity_model()
+severity_model()
