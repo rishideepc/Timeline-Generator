@@ -1,9 +1,10 @@
-import sys
+import http
 import requests
 from bs4 import BeautifulSoup
 from datetime import *
 from nltk.tag import StanfordNERTagger
 import pandas as pd
+from dateutil import parser
 from nltk.tokenize import word_tokenize
 from nltk.stem import PorterStemmer
 import re
@@ -30,9 +31,26 @@ class CronJob:
         self.bert = BertQA()
         self.endpoint = "http://api.positionstack.com/v1/forward"
         self.access_key = "2e9fd33a8efefbcd7fa0181c9cde822c"
+        self.meteor_endpoint = "http://api.weatherapi.com/v1/history.json?key=fbed75f256c34ece85e95233231705&q={" \
+                               "0}&dt={1} "
 
-    # def __del__(self):
-    #     del self.dao
+    def get_meteor_data(self, lat, long, dt):
+        try:
+            dt = parser.parse(dt)
+            dt = dt.strftime("%Y-%m-%d")
+            url = self.meteor_endpoint.replace("{0}", f"{lat},{long}").replace("{1}",dt)
+        except:
+            temp, wind, rain = "", "", ""
+            return temp, wind, rain
+        resp = requests.get(url)
+        if resp.status_code == http.HTTPStatus.OK:
+            res = resp.json()["forecast"]["forecastday"][0]["day"]
+            temp = str(res["avgtemp_c"]) + " C"
+            wind = str(res["maxwind_kph"]) + " kph"
+            rain = str(res["totalprecip_mm"]) + " mm"
+        else:
+            temp, wind, rain = "", "", ""
+        return temp, wind, rain
 
     def has_number_words(self, sentence):
         words = sentence.split()
@@ -201,13 +219,15 @@ class CronJob:
                 casualty_injured = self.get_casualty(title, content)
                 date_, location, casualty_injured, latitude, longitude \
                     = self.combine_results(bert_details, location, casualty_injured)
+                temp, wind, rain = self.get_meteor_data(latitude, longitude, date_)
                 self.dao.insert(title, content, type_, location, casualty_injured, severity_label, text_summary,
-                                cron_job_date_, date_, latitude, longitude)
-            except Exception:
-                pass
+                                cron_job_date_, date_, latitude, longitude, temp, wind, rain)
+            except Exception as e:
+                print(e.__str__())
         self.dao.connect_.close()
 
 
 if __name__ == "__main__":
     obj = CronJob()
     obj.fetch_gnews_article()
+    # print(obj.get_meteor_data('39.098999', '-111.878816', 'Tuesday afternoon'))
