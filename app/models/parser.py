@@ -25,7 +25,7 @@ class DataParser:
         no_items = 0
         visited = {}
         for item in items:
-            latitude, longitude = item["Latitude"], item["Longitude"]
+            latitude, longitude = float(item[9]), float(item[10])
             if bounds[1] <= latitude <= bounds[3] and bounds[0] <= longitude <= bounds[2]:
                 group = (item[1][:16], item[3])
                 if group in visited:

@@ -7,6 +7,10 @@ from app.models.parser import DataParser
 import requests
 
 
+endpoint = "http://api.positionstack.com/v1/forward"
+access_key = "2e9fd33a8efefbcd7fa0181c9cde822c"
+
+
 @app.route('/about')
 def my_form_about():
     return render_template('about.html')

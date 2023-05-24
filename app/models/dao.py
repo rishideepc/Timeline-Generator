@@ -25,7 +25,10 @@ class DAOOperations:
                 CronJobDate text,
                 PublicationDate text,
                 Latitude text,
-                Longitude text
+                Longitude text,
+                temp text,
+                wind text,
+                rain text
             )
             """)
         self.connect_.commit()
@@ -56,10 +59,11 @@ class DAOOperations:
             items = self.cursor_.fetchall()
             return items
 
-    def insert(self, title, content, type_, location, casualty_injured, severity_label, text_summary, cron_job_date_, date_, lat, long):
-        set_ = (title.lower(), content.lower(), type_.lower(), ",".join(location).lower(), casualty_injured,
-                severity_label[0].lower(), text_summary, cron_job_date_, date_, lat, long)
-        self.cursor_.execute("INSERT INTO Landslide values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", set_)
+    def insert(self, title, content, type_, location, casualty_injured, severity_label, text_summary, cron_job_date_,
+               date_, lat, long, temp, wind, rain):
+        set_ = (title.lower(), content.lower(), type_.lower(), location.lower(), casualty_injured,
+                severity_label[0].lower(), text_summary, cron_job_date_, date_, lat, long, temp, wind, rain)
+        self.cursor_.execute("INSERT INTO Landslide values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", set_)
         self.connect_.commit()
 
 
