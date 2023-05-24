@@ -1,4 +1,7 @@
-import sys
+import dateparser
+import datetime
+from dateparser_data.settings import default_parsers
+import string
 import requests
 from bs4 import BeautifulSoup
 from datetime import *
@@ -156,8 +159,29 @@ class CronJob:
                     casualty_injured = f"Casualties: {temp_1.group()}"
         return casualty_injured
 
-    def combine_results(self, bert_results, location, casualty_injured):
+    def get_date(self, content):
+        parsers = [parser for parser in default_parsers if parser not in ['timestamp', 'negative-timestamp']]
+        dates = []
+        x = content.translate(str.maketrans('', '', string.punctuation))
+        for line in x.split(" "):
+            date_ = dateparser.parse(line,
+                                     settings={'RELATIVE_BASE': datetime.datetime.today(), 'PREFER_DATES_FROM': 'past',
+                                               'PARSERS': parsers},
+                                     languages=['en'])
+
+            if date_ and date_.date() <= datetime.date.today():
+                difference = datetime.datetime.today() - date_
+                difference_in_months = (difference.days + difference.seconds / 86400) / 30
+                if difference_in_months < 1 and date_.date() != datetime.date.today():
+                    # print(line, date_.date(), datetime.date.today())
+                    dates.append(date_.date())
+
+        return list(set(dates))
+
+    def combine_results(self, bert_results, location, casualty_injured, dates):
         date_ = bert_results[2]
+        if not date_ :
+            date_ = dates[0]
         loc = bert_results[3]
         if loc != "Negative" and not location:
             location = loc
@@ -199,8 +223,9 @@ class CronJob:
                 severity_label = self.get_severity(content)
                 text_summary = self.get_text_summary(content)
                 casualty_injured = self.get_casualty(title, content)
+                date_ = self.get_date(content)
                 date_, location, casualty_injured, latitude, longitude \
-                    = self.combine_results(bert_details, location, casualty_injured)
+                    = self.combine_results(bert_details, location, casualty_injured, date_)
                 self.dao.insert(title, content, type_, location, casualty_injured, severity_label, text_summary,
                                 cron_job_date_, date_, latitude, longitude)
             except Exception:

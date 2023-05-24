@@ -7,7 +7,7 @@ class DAOOperations:
         try:
             self.connect_ = sqlite3.connect('..\\resources\\timeline-data.db')
         except:
-            self.connect_ = sqlite3.connect('..\\resources\\timeline-data.db')
+            self.connect_ = sqlite3.connect('.\\resources\\timeline-data.db')
         self.cursor_ = self.connect_.cursor()
 
     def create_table(self):
