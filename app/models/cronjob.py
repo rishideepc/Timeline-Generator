@@ -5,7 +5,7 @@ import string
 import http
 import requests
 from bs4 import BeautifulSoup
-from datetime import *
+# from datetime import *
 from nltk.tag import StanfordNERTagger
 import pandas as pd
 from dateutil import parser
@@ -42,7 +42,7 @@ class CronJob:
         try:
             dt = parser.parse(dt)
             dt = dt.strftime("%Y-%m-%d")
-            url = self.meteor_endpoint.replace("{0}", f"{lat},{long}").replace("{1}",dt)
+            url = self.meteor_endpoint.replace("{0}", f"{lat},{long}").replace("{1}", dt)
         except:
             temp, wind, rain = "", "", ""
             return temp, wind, rain
@@ -128,7 +128,7 @@ class CronJob:
                 casualty_injured = "Casualty or injury not found"
                 flag = 0
             else:
-                temp_3 = re.compile(r' \d\d\d | \d\d | \d ').search(stemmed_output)
+                temp_3 = re.compile(r' \d+ ').search(stemmed_output)
                 if not temp_3:
                     if not self.has_number_words(title):
                         casualty_injured = "Injury found - Couldn't detect count of injured."
@@ -138,7 +138,7 @@ class CronJob:
                 else:
                     casualty_injured = f"Injuries: {temp_3.group()}"
         else:
-            temp_1 = re.compile(r' \d\d\d | \d\d | \d ').search(stemmed_output)
+            temp_1 = re.compile(r' \d+ ').search(stemmed_output)
             if not temp_1:
                 if not self.has_number_words(title):
                     casualty_injured = "Casualty Found - Couldn't detect count of casualities."
@@ -157,7 +157,7 @@ class CronJob:
                 if not temp_2:
                     casualty_injured = "Casualty or injury not found"
                 else:
-                    temp_3 = re.compile(r' \d\d\d | \d\d | \d ').search(stemmed_output_)
+                    temp_3 = re.compile(r' \d+ ').search(stemmed_output_)
                     if not temp_3:
                         if not self.has_number_words(content):
                             casualty_injured = "Injuries Found - Couldn't detect count of casualities."
@@ -167,7 +167,7 @@ class CronJob:
                     else:
                         casualty_injured = f"Injuries: {temp_3.group()}"
             else:
-                temp_1 = re.compile(r' \d\d\d | \d\d | \d ').search(stemmed_output_)
+                temp_1 = re.compile(r' \d+ ').search(stemmed_output_)
                 if not temp_1:
                     if not self.has_number_words(content):
                         casualty_injured = "Casualty Found - Couldn't detect count of casualities."
@@ -198,9 +198,14 @@ class CronJob:
         return list(set(dates))
 
     def combine_results(self, bert_results, location, casualty_injured, dates):
-        date_ = bert_results[2]
-        if not date_ :
+        date_ = dateparser.parse(bert_results[2])
+        if not date_ and dates:
             date_ = dates[0]
+        elif date_:
+            date_ = date_.date()
+        else:
+            date_ = ""
+        date_ = str(date_)
         loc = bert_results[3]
         if loc != "Negative" and not location:
             location = loc
@@ -228,7 +233,7 @@ class CronJob:
 
     def fetch_gnews_article(self):
         keyword = self.keywords_disaster[0]
-        today = date.today()
+        today = datetime.date.today()
         cron_job_date_ = f'{today.strftime("%b-%d-%Y")}'
         articles = self.get_articles(keyword)
         for index, article in enumerate(articles['entries']):
@@ -244,7 +249,7 @@ class CronJob:
                 casualty_injured = self.get_casualty(title, content)
                 date_ = self.get_date(content)
                 date_, location, casualty_injured, latitude, longitude \
-                    = self.combine_results(bert_details, location, casualty_injured)
+                    = self.combine_results(bert_details, location, casualty_injured, date_)
                 temp, wind, rain = self.get_meteor_data(latitude, longitude, date_)
                 self.dao.insert(title, content, type_, location, casualty_injured, severity_label, text_summary,
                                 cron_job_date_, date_, latitude, longitude, temp, wind, rain)
