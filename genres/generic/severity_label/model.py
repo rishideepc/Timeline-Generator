@@ -15,11 +15,13 @@ import pandas as pd
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn import svm
 from sklearn.linear_model import LinearRegression
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.corpus import stopwords
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, precision_recall_curve
+from sklearn.naive_bayes import GaussianNB
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer, PorterStemmer
 import nltk
@@ -56,12 +58,19 @@ def severity_model():
     xv_test= vectorization.transform(X_test)
 
     # model_gini= DecisionTreeClassifier(criterion="gini", random_state=123, max_depth=10, min_samples_leaf=6)
+    # model_gini= RandomForestClassifier(criterion="gini", n_estimators=50, max_depth=10, min_samples_leaf=6)
     model_gini=svm.SVC(kernel='linear')
+
     model_gini.fit(xv_train, y_train)
     y_pred= model_gini.predict(xv_test)
-    print("\nPredicted: ", y_pred)
-    print("\nTest: ", y_test)
+    # print("\nPredicted: ", y_pred)
+    # print("\nTest: ", y_test)
+    print("\nConfusion Matrix: ", confusion_matrix(y_test, y_pred))
     print("\nAccuracy Score: ", accuracy_score(y_test, y_pred)*100, "%")
+    print("\nPrecision: ", precision_score(y_test, y_pred, average="weighted")*100, "%")
+    print("\nRecall: ", recall_score(y_test, y_pred, average="weighted")*100, "%")
+    print("\nF1 Score: ", f1_score(y_test, y_pred, average="weighted")*100, "%")
+    
     # pickle.dump(model_gini, open('severity_model.pkl', 'wb'))
     # return vectorization
     ############################ Training ends ###################################
