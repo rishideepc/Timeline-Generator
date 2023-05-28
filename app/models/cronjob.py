@@ -1,3 +1,4 @@
+import traceback
 import dateparser
 import datetime
 from dateparser_data.settings import default_parsers
@@ -76,7 +77,7 @@ class CronJob:
         pubdate = article.get('published')
         html = requests.get(url=link)
         soup = BeautifulSoup(html.content, 'lxml')
-        paragraphs = soup.find_all('p', text=True)
+        paragraphs = soup.find_all('p', string=True)
         content = '\n'.join([para.string for para in paragraphs])
         content = content.strip()
         return title, link, pubdate, content
@@ -228,7 +229,10 @@ class CronJob:
             'limit': 1
         }
         response = requests.get(self.endpoint, params=params_2).json()
-        latitude, longitude = response['data'][0]['latitude'], response['data'][0]['longitude']
+        try:
+            latitude, longitude = response['data'][0]['latitude'], response['data'][0]['longitude']
+        except:
+            latitude, longitude = '', ''
         return date_, location, casualty_injured, latitude, longitude
 
     def fetch_gnews_article(self):
@@ -241,6 +245,8 @@ class CronJob:
                 break
             try:
                 title, link, pubdate, content = self.get_details(article)
+                if 'election' in title or 'election' in content or 'victory' in title or 'victory' in content:
+                    continue
                 type_ = keyword
                 bert_details = self.bert.wrapper(content)
                 location = self.get_location(title, content)
@@ -255,6 +261,7 @@ class CronJob:
                                 cron_job_date_, date_, latitude, longitude, temp, wind, rain)
             except Exception as e:
                 print(e.__str__())
+                print(traceback.format_exc())
         self.dao.connect_.close()
 
 
