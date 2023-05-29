@@ -12,7 +12,7 @@
     </py-env>
     <title style="font-size: larger;">Automated Event-archive Generator</title>
     <style>
-      #type, #severity, #title, #summary, #casualty_injured {
+      #type, #severity, #title, #summary, #casualty_injured, #lat_lon, #met_data {
         width: 20px;
         height: 20px;
         background-color: #eee;
@@ -23,7 +23,7 @@
         position: relative;
       }
 
-      #type:checked::after, #severity:checked::after, #title:checked::after, #summary:checked::after, #casualty_injured:checked::after {
+      #type:checked::after, #severity:checked::after, #title:checked::after, #summary:checked::after, #casualty_injured:checked::after, #lat_lon:checked::after, #met_data:checked::after {
         content: "";
         display: block;
         position: absolute;
@@ -36,7 +36,7 @@
         border-radius: 1px;
       }
 
-      #type:focus, #severity:focus, #title:focus, #summary:focus, #casualty_injured:focus {
+      #type:focus, #severity:focus, #title:focus, #summary:focus, #casualty_injured:focus, #lat_lon:focus, #met_data:focus {
         outline: none; /* remove default focus outline */
         box-shadow: 0 0 3px #999; /* add custom focus style */;
       }
@@ -94,25 +94,34 @@
                     Features
                 </label>
                 <div style="padding-left: 20px;">
-                  <div class="block text-grey-darker dark:text-white text-sm font-italic mb-2">
+                  <!-- <div class="block text-grey-darker dark:text-white text-sm font-italic mb-2">
                     <input type="checkbox" id="type" name="features[]" value="type">
                     <label for="type">Type</label>
-                  </div>
+                  </div> -->
                   <div class="block text-grey-darker dark:text-white text-sm font-italic mb-2">
                     <input type="checkbox" id="severity" name="features[]" value="severity">
                     <label for="severity">Severity</label>
                   </div>
-                  <div class="block text-grey-darker dark:text-white text-sm font-italic mb-2">
+                  <!-- <div class="block text-grey-darker dark:text-white text-sm font-italic mb-2">
                     <input type="checkbox" id="title" name="features[]" value="title">
                     <label for="title">Title</label>
-                  </div>
+                  </div> -->
                   <div class="block text-grey-darker dark:text-white text-sm font-italic mb-2">
                     <input type="checkbox" id="summary" name="features[]" value="summary">
                     <label for="summary">Summary</label>
                   </div>
                   <div class="block text-grey-darker dark:text-white text-sm font-italic mb-2">
                     <input type="checkbox" id="casualty_injured" name="features[]" value="casualty_injured">
-                    <label for="casualty_injured">Casualty/Injured</label>
+                    <label for="casualty_injured">Affected</label>
+                  </div>
+
+                  <div class="block text-grey-darker dark:text-white text-sm font-italic mb-2">
+                    <input type="checkbox" id="lat_lon" name="features[]" value="lat_lon">
+                    <label for="lat_lon">Latitude/Longitude</label>
+                  </div>
+                  <div class="block text-grey-darker dark:text-white text-sm font-italic mb-2">
+                    <input type="checkbox" id="met_data" name="features[]" value="met_data">
+                    <label for="met_data">Metereological Data</label>
                   </div>
                 </div>
             

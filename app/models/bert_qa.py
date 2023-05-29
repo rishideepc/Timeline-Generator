@@ -1,3 +1,5 @@
+import sys
+sys.path.append('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator')
 import torch
 from transformers import BertForQuestionAnswering
 from transformers import BertTokenizer

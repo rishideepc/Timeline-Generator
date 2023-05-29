@@ -1,13 +1,15 @@
 import sys
+sys.path.append('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator')
+import sys
 import sqlite3
 
 
 class DAOOperations:
     def __init__(self):
         try:
-            self.connect_ = sqlite3.connect('..\\resources\\timeline-data.db')
+            self.connect_ = sqlite3.connect('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\app\\resources\\timeline-data.db')
         except:
-            self.connect_ = sqlite3.connect('.\\resources\\timeline-data.db')
+            self.connect_ = sqlite3.connect('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\app\\resources\\timeline-data.db')
         self.cursor_ = self.connect_.cursor()
 
     def create_table(self):

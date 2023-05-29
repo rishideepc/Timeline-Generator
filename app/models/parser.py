@@ -1,4 +1,6 @@
 import sys
+sys.path.append('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator')
+import sys
 from app.views.endpoints import *
 
 
@@ -14,13 +16,18 @@ class DataParser:
         return text_keyword, text_date_time, text_location, text_features
 
     def parse_db_data(self, items, bounds):
-        # date_time_ = []
+        date = []
         title = []
         desc = []
         casualty_injured = []
         severity = []
         summary = []
         location = []
+        _latitude= []
+        _longitude= []
+        temperature= []
+        wind= []
+        rain= []
 
         no_items = 0
         visited = {}
@@ -39,5 +46,11 @@ class DataParser:
                 severity.append(item[5])
                 summary.append(item[6])
                 location.append(item[3])
+                _latitude.append(item[9])
+                _longitude.append(item[10])
+                temperature.append(item[11])
+                wind.append(item[12])
+                rain.append(item[13])
+                date.append(item[8])
                 no_items += 1
-        return title, desc, casualty_injured, severity, summary, no_items, location
+        return title, desc, casualty_injured, severity, summary, no_items, location, _latitude, _longitude, temperature, wind, rain, date

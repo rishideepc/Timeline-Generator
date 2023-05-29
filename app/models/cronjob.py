@@ -1,3 +1,5 @@
+import sys
+sys.path.append('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator')
 import traceback
 import dateparser
 import datetime
@@ -27,8 +29,8 @@ from app.models.bert_qa import BertQA
 class CronJob:
     def __init__(self):
         self.st = StanfordNERTagger(
-            '..\\resources\\stanford-ner-2020-11-17\\classifiers\\english.all.3class.distsim.crf.ser.gz',
-            '..\\resources\\stanford-ner-2020-11-17\\stanford-ner.jar',
+            'C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\app\\resources\\stanford-ner-2020-11-17\\classifiers\\english.all.3class.distsim.crf.ser.gz',
+            'C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\app\\resources\\stanford-ner-2020-11-17\\stanford-ner.jar',
             encoding='utf-8')
         self.keywords_disaster = ['landslide']
         self.gn = GoogleNews()
@@ -99,7 +101,7 @@ class CronJob:
         return location
 
     def get_severity(self, content):
-        pickled_model_gini = pickle.load(open('..\\resources\\severity_model.pkl', 'rb'))
+        pickled_model_gini = pickle.load(open('C:\\Users\\HP\\Desktop\\Python_AI\\Timeline_Generator\\app\\resources\\severity_model.pkl', 'rb'))
         X_test = pd.Series(content)
         xv_test = vectorized.transform(X_test)
         severity_label = pickled_model_gini.predict(xv_test)
@@ -257,6 +259,24 @@ class CronJob:
                 date_, location, casualty_injured, latitude, longitude \
                     = self.combine_results(bert_details, location, casualty_injured, date_)
                 temp, wind, rain = self.get_meteor_data(latitude, longitude, date_)
+                # Printing in console
+                print(f'''
+                    {index+1}.  Title: {title}
+                        Paragraph: {content}
+                        Event Type: {type_}
+                        Location: {location}
+                        Casualty/Injured: {casualty_injured}
+                        Severity: {severity_label}
+                        Text Summary: {text_summary}
+                        Cron_Job Date: {cron_job_date_}
+                        Event Date: {date_}
+                        Latitude: {latitude}
+                        Longitude: {longitude}
+                        Temperature: {temp}
+                        Wind Speed: {wind}
+                        Rain: {rain}
+                                    \n
+                ''')
                 self.dao.insert(title, content, type_, location, casualty_injured, severity_label, text_summary,
                                 cron_job_date_, date_, latitude, longitude, temp, wind, rain)
             except Exception as e:

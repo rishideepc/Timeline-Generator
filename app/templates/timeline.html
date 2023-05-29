@@ -45,41 +45,76 @@
                 {%for i in range(0, num): %}
                 <li>
                     <div class="timeline-content">
-                      {% if "type" in features_ %}
+                      
+                      {% if desc_[i] %}
+                        <h4>
+                            Title: {{desc_[i]}}
+                        </h4>
+                      {% endif %}
+                    
+                      <!-- {% if "type" in features_ %}
                         {%if title_[i]%}
                         <h2>{{title_[i]}}</h2>
                         {% endif %}
-                      {% endif %}
+                      {% endif %} -->
                       {% if "summary" in features_ %}
                         {%if summary_[i]%}
-                        <h2>{{summary_[i]}}</h2>
+                        <h2>Summary: {{summary_[i]}}</h2>
                         {% endif %}
                       {% endif %}
-                      {% if "title" in features_ %}
+                      <!-- {% if "title" in features_ %}
                         {% if desc_[i] %}
                         <p>
                             {{desc_[i]}}
                         </p>
                         {% endif %}
-                      {% endif %}
-                      {% if "casualty/injured" in features_ %}
+                      {% endif %} -->
+                      {% if "casualty_injured" in features_ %}
                         {% if casualty_injured_[i] %}
-                        <h3>
-                            {{casualty_injured_[i]}}
-                        </h3>
+                        <h4>
+                            Affected: {{casualty_injured_[i]}}
+                        </h4>
                         {% endif %}
                       {% endif %}
                       {% if "severity" in features_ %}
                         {% if severity_[i] %}
-                        <h3>
+                        <h4>
                             Predicted Severity: {{severity_[i]}}
-                        </h3>
+                        </h4>
                         {% endif %}
                       {% endif %}
                       {% if location_[i] %}
                       <h4>
                           Location: {{location_[i]}}
                       </h4>
+                      {% endif %}
+                      {% if "lat_lon" in features_ %}
+                        {% if latitude_[i] %}
+                          <h4>Latitude: {{latitude_[i]}}</h4>
+                        {% endif %}
+                        {% if longitude_[i] %}
+                          <h4>Longitude: {{longitude_[i]}}/h4>
+                        {% endif %}
+                      {% endif %}
+                      {% if "met_data" in features_ %}
+                        {% if temperature_[i] %}
+                        <h4>
+                            Temperature: {{temperature_[i]}}
+                        </h4>
+                        {% endif %}
+                        {% if wind_[i] %}
+                        <h4>
+                            Wind: {{wind_[i]}}
+                        </h4>
+                        {% endif %}
+                        {% if rain_[i] %}
+                        <h4>
+                            Rain: {{rain_[i]}}
+                        </h4>
+                        {% endif %}
+                      {% endif %}
+                      {% if date_[i] %}
+                        <h4>Date: {{date_[i]}}</h4>
                       {% endif %}
                     </div>
                 </li> 

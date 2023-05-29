@@ -47,8 +47,8 @@ def my_form_post():
         # text_features= []
         text_features= request.form.getlist('features[]')
         items = dao.query_all(text_keyword, text_location)
-        title, desc, casualty_injured, severity, summary, no_items, location = parser.parse_db_data(items, bounds)
+        title, desc, casualty_injured, severity, summary, no_items, location, latitude, longitude, temperature, wind, rain, date = parser.parse_db_data(items, bounds)
         # features_timeline = text_features.split(" ")
         return render_template('timeline.html', title_=title, desc_=desc, num=no_items,
                                casualty_injured_=casualty_injured, severity_=severity, summary_=summary,
-                               features_=text_features, location_=location)
+                               features_=text_features, location_=location, latitude_=latitude, longitude_=longitude, temperature_=temperature, wind_=wind, rain_=rain, date_=date)
