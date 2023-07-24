@@ -16,8 +16,10 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, precision_recall_curve
 
 import matplotlib.pyplot as plt
+import datetime
 import re
-
+import time
+import psutil
 
 def plot_roc_curve(true_y, y_prob):
     fpr = dict()
@@ -41,7 +43,8 @@ def plot_roc_curve(true_y, y_prob):
 
 
 def severity_model():
-    data = pd.read_excel('..\\resources\\Labelled.xlsx')
+    start= time.time()
+    data = pd.read_excel('C:/Users/HP/Desktop/Python_AI/Timeline_Generator/app/resources/Labelled.xlsx')
 
     for j in range(0, 818):
         data['Label'][j] = data['Label'][j].lower()
@@ -68,6 +71,8 @@ def severity_model():
 
     model_gini.fit(xv_train, y_train)
     y_pred = model_gini.predict(xv_test)
+    end= time.time()
+    memory_used=psutil.virtual_memory()[3]/1000000000
     cm = confusion_matrix(y_test.argmax(axis=1), y_pred.argmax(axis=1))
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=model_gini.classes_)
     disp.plot()
@@ -82,6 +87,9 @@ def severity_model():
     # return vectorization
     plot_roc_curve(y_test, y_pred)
     print(f'model 1 AUC score: {roc_auc_score(y_test, y_pred)}')
+    td=(end - start) *10**3
+    print(f"\nExecution Time: {td}ms") 
+    print("\nMemory Used (GB): ", memory_used)
 
 
 # vectorized = severity_model()
