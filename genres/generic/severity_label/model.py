@@ -3,9 +3,10 @@ from xmlrpc.client import DateTime
 import requests
 from bs4 import BeautifulSoup
 import urllib, json
-import time
+import datetime
 from datetime import *
 import re
+import psutil
 ######################### *******NER Import********** #################################
 from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
@@ -17,6 +18,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn import svm
+from sklearn.linear_model import SGDClassifier
+from sklearn.multiclass import OneVsRestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neural_network import MLPClassifier
 from sklearn.linear_model import LinearRegression
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.corpus import stopwords
@@ -37,6 +42,7 @@ import pickle
 
 ############## ******************TRAINING THE SEVERITY MODEL*********************** #########################
 def severity_model():
+    start= datetime.now()
     data= pd.read_excel('C:/Users/HP/Desktop/Python_AI/Timeline_Generator/genres/generic/severity_label/Labelled.xlsx')
 
     ################################ Data cleansing ##################################
@@ -57,19 +63,33 @@ def severity_model():
     xv_train= vectorization.fit_transform(X_train)
     xv_test= vectorization.transform(X_test)
 
-    # model_gini= DecisionTreeClassifier(criterion="gini", random_state=123, max_depth=10, min_samples_leaf=6)
-    # model_gini= RandomForestClassifier(criterion="gini", n_estimators=50, max_depth=10, min_samples_leaf=6)
-    model_gini=svm.SVC(kernel='linear')
+    # model_gini= DecisionTreeClassifier(criterion="gini")
+    # model_gini= RandomForestClassifier(criterion="gini")
+    # model_gini=svm.SVC(kernel='linear')
+
+    # model_gini= OneVsRestClassifier(DecisionTreeClassifier())
+    # model_gini= OneVsRestClassifier(RandomForestClassifier())
+    # model_gini = OneVsRestClassifier(svm.SVC())
+    # model_gini = OneVsRestClassifier(KNeighborsClassifier(n_neighbors=3))
+    # model_gini = OneVsRestClassifier(SGDClassifier())
+    model_gini = OneVsRestClassifier(MLPClassifier())
 
     model_gini.fit(xv_train, y_train)
     y_pred= model_gini.predict(xv_test)
     # print("\nPredicted: ", y_pred)
     # print("\nTest: ", y_test)
+    end= datetime.now()
+    memory_used=psutil.virtual_memory()[3]/1000000000
+
     print("\nConfusion Matrix: ", confusion_matrix(y_test, y_pred))
     print("\nAccuracy Score: ", accuracy_score(y_test, y_pred)*100, "%")
     print("\nPrecision: ", precision_score(y_test, y_pred, average="weighted")*100, "%")
     print("\nRecall: ", recall_score(y_test, y_pred, average="weighted")*100, "%")
     print("\nF1 Score: ", f1_score(y_test, y_pred, average="weighted")*100, "%")
+    td=(end - start).total_seconds() *10**3
+    print(f"\nExecution Time: {td:.03f}ms") 
+    print("\nMemory Used (GB): ", memory_used)
+
     
     # pickle.dump(model_gini, open('severity_model.pkl', 'wb'))
     # return vectorization
