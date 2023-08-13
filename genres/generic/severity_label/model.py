@@ -7,6 +7,7 @@ import datetime
 from datetime import *
 import re
 import psutil
+from memory_profiler import profile
 ######################### *******NER Import********** #################################
 from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
@@ -41,6 +42,7 @@ import pickle
 ########################################## *****IMPORT ENDS***** ############################################################################
 
 ############## ******************TRAINING THE SEVERITY MODEL*********************** #########################
+@profile
 def severity_model():
     start= datetime.now()
     data= pd.read_excel('C:/Users/HP/Desktop/Python_AI/Timeline_Generator/genres/generic/severity_label/Labelled.xlsx')
@@ -116,4 +118,8 @@ def severity_model():
 
 
 # vectorized = severity_model()
-severity_model()
+if __name__=="__main__":
+    severity_model()
+    process= psutil.Process()
+    memory_usage= process.memory_info().rss / 1024 / 1024
+    print(f"Total memory usage: {memory_usage:.2f} MB")
